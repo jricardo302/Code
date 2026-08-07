@@ -260,20 +260,26 @@ export default function Home() {
         </section>
 
         {/* De doos */}
-        <section className="overflow-hidden px-5 py-16 sm:py-24">
-          <div className="mx-auto max-w-5xl">
+        <section className="relative overflow-hidden bg-paars-diep px-5 py-16 sm:py-24">
+          {/* Zachte lichtval achter de doos, zoals op een studio-achtergrond */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_55%_at_50%_42%,rgba(201,168,224,0.22),transparent_70%)]"
+          />
+          <div className="relative mx-auto max-w-5xl">
             <div className="mx-auto max-w-2xl text-center">
-              <h2 className="font-serif text-3xl tracking-tight sm:text-4xl">
+              <h2 className="font-serif text-3xl tracking-tight text-creme sm:text-4xl">
                 En zo ziet &apos;ie eruit
               </h2>
-              <p className="mt-4 text-base leading-relaxed text-paars-diep/75 sm:text-lg">
-                Kraftkarton, gouden opdruk, honderd kaarten met ronde hoeken.
-                Groot genoeg om op tafel te zien liggen, klein genoeg voor je
-                rugtas.
+              <p className="mt-4 text-base leading-relaxed text-creme/70 sm:text-lg">
+                Een plat doosje met magneetsluiting, diep paars, het woordmerk
+                in goudfolie. Honderd kaarten met ronde hoeken en een fijne
+                gouden keylijn. Groot genoeg om op tafel te zien liggen, klein
+                genoeg voor je rugtas.
               </p>
             </div>
 
-            <div className="mt-12">
+            <div className="mt-14">
               <Kaartendoos />
             </div>
           </div>

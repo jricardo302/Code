@@ -62,6 +62,28 @@ Drie manieren om dat op te lossen, elk met een prijs:
 Nu staat optie 3 in de code — bewust, omdat de opdracht deze zes hexwaarden
 noemde. Zeg het als je 1 of 2 liever hebt; het is een regel of drie.
 
+## De doos: belichting
+
+De kaartendoos is een isometrische SVG-constructie, en daar horen tinten bij
+die géén merkkleuren zijn — ze bestaan alleen om licht te suggereren. Ze zijn
+allemaal afgeleid van `#3B1E4A`.
+
+| Vlak                 | Hex                     | Waarom                              |
+| -------------------- | ----------------------- | ----------------------------------- |
+| Deksel (bovenvlak)   | `#4E2964` → `#3D1F4E`   | vangt het meeste licht              |
+| Lange voorkant       | `#3A1E49` → `#2C1637`   | staat schuin op de lichtbron        |
+| Kopse kant rechts    | `#241130`               | ligt het verst van het licht af     |
+| Bak onder het deksel | zwart op 16% dekking    | maakt de naad van de magneetsluiting|
+| Slagschaduw          | `#150919`               | onder de doos en onder de kaarten   |
+| Goudfolie            | `#F4E09B` → `#A8831A`   | verloop, geen vlakke kleur          |
+| Kaartkarton          | `#FCF9F0` → `#EFE7D3`   | warm wit voor de vraagkaarten       |
+
+Het goud is bewust een verloop van licht naar donker: één vlakke gouden kleur
+ziet er op een scherm uit als gele inkt, een verloop leest als folie.
+
+Deze tinten horen bij de illustratie, niet bij het merk. Wie de merkkleuren
+aanpast, moet ze opnieuw afleiden — ze staan in `components/Kaartendoos.tsx`.
+
 ## Typografie
 
 | Rol       | Font        | Fallback                        |
