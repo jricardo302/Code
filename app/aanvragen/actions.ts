@@ -70,7 +70,7 @@ export async function verstuurAanvraag(
       aantal: aanvraag.aantal,
     };
   } catch (fout) {
-    console.error("[InterVISIE] Aanvraag opslaan mislukt:", fout);
+    console.error("[ik zie ik zie] Aanvraag opslaan mislukt:", fout);
     return {
       status: "fout",
       fouten: {

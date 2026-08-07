@@ -20,7 +20,7 @@ if (
   process.env.NEXT_PHASE !== "phase-production-build"
 ) {
   console.warn(
-    "[InterVISIE] Geen DATABASE_URL gevonden — aanvragen gaan naar een JSON-bestand. " +
+    "[ik zie ik zie] Geen DATABASE_URL gevonden — aanvragen gaan naar een JSON-bestand. " +
       "Op een serverless host (zoals Vercel) raak je die bij de volgende deploy kwijt. " +
       "Zet DATABASE_URL naar een Postgres-database. Zie README.md.",
   );

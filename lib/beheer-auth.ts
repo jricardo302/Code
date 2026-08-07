@@ -1,7 +1,7 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 
-const COOKIE = "intervisie_beheer";
+const COOKIE = "ikzieikzie_beheer";
 const GELDIG_MS = 8 * 60 * 60 * 1000; // 8 uur
 
 function wachtwoord(): string | undefined {

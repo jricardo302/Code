@@ -85,7 +85,7 @@ export function AanvraagFormulier({ contactMail }: { contactMail: string }) {
           {status.aantal === 1
             ? "Eén exemplaar met jouw naam erop."
             : `${status.aantal} exemplaren met jouw naam erop.`}{" "}
-          Je hoeft nu niets meer te doen. Zodra InterVISIE klaarligt, hoor je
+          Je hoeft nu niets meer te doen. Zodra het spel klaarligt, hoor je
           van ons — met een echt bericht van een echt mens, geen
           automatiseringsketen.
         </p>

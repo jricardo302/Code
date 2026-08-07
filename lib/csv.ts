@@ -49,5 +49,5 @@ export function naarCsv(aanvragen: Aanvraag[]): string {
 }
 
 export function csvBestandsnaam(nu = new Date()): string {
-  return `intervisie-aanvragen-${nu.toISOString().slice(0, 10)}.csv`;
+  return `ikzieikzie-aanvragen-${nu.toISOString().slice(0, 10)}.csv`;
 }

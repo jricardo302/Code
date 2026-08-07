@@ -7,12 +7,12 @@ const verbindingsString =
 
 // Eén pool per proces; in dev overleeft die de hot reloads via globalThis.
 const globaal = globalThis as typeof globalThis & {
-  __intervisiePool?: Pool;
-  __intervisieMigratie?: Promise<void>;
+  __ikzieikziePool?: Pool;
+  __ikzieikzieMigratie?: Promise<void>;
 };
 
 function pool(): Pool {
-  globaal.__intervisiePool ??= new Pool({
+  globaal.__ikzieikziePool ??= new Pool({
     connectionString: verbindingsString,
     // Vercel Postgres, Neon en Supabase vragen allemaal om TLS.
     ssl: /localhost|127\.0\.0\.1/.test(verbindingsString)
@@ -20,12 +20,12 @@ function pool(): Pool {
       : { rejectUnauthorized: false },
     max: 3,
   });
-  return globaal.__intervisiePool;
+  return globaal.__ikzieikziePool;
 }
 
 /** Maakt de tabel aan als die er nog niet is. Draait hooguit één keer per proces. */
 function zorgVoorTabel(): Promise<void> {
-  globaal.__intervisieMigratie ??= pool()
+  globaal.__ikzieikzieMigratie ??= pool()
     .query(
       `CREATE TABLE IF NOT EXISTS aanvragen (
          id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -42,10 +42,10 @@ function zorgVoorTabel(): Promise<void> {
     .then(() => undefined)
     .catch((fout) => {
       // Niet cachen als het misging, anders blijft de fout hangen.
-      globaal.__intervisieMigratie = undefined;
+      globaal.__ikzieikzieMigratie = undefined;
       throw fout;
     });
-  return globaal.__intervisieMigratie;
+  return globaal.__ikzieikzieMigratie;
 }
 
 type Rij = {

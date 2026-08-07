@@ -87,11 +87,16 @@ export default function Home() {
               100 vragen · 3 niveaus · 2–8 spelers
             </p>
 
-            <h1 className="text-5xl leading-[0.95] font-normal tracking-tight sm:text-7xl">
-              <Woordmerk />
+            <h1 className="flex justify-center">
+              <Woordmerk
+                className="text-5xl leading-[0.95] font-normal tracking-tight sm:text-7xl"
+                ondertekst
+                ondertekstKlasse="mt-4 text-xs tracking-[0.42em] sm:text-sm sm:tracking-[0.5em]"
+                gecentreerd
+              />
             </h1>
 
-            <p className="mt-5 font-serif text-xl text-paars-diep/85 tekst-balans sm:text-2xl">
+            <p className="mt-7 font-serif text-xl text-paars-diep/85 tekst-balans sm:text-2xl">
               het kaartspel voor wie <em className="not-italic">ándere</em>{" "}
               mensen begeleidt
             </p>
@@ -106,7 +111,7 @@ export default function Home() {
                 href="/aanvragen"
                 className="w-full rounded-full bg-paars-diep px-8 py-3.5 text-center font-semibold text-creme shadow-[0_10px_24px_-12px_rgba(59,30,74,0.9)] transition-transform hover:-translate-y-0.5 hover:bg-paars sm:w-auto"
               >
-                Vraag InterVISIE aan
+                Vraag het spel aan
               </Link>
               <a
                 href="#niveaus"
@@ -144,11 +149,12 @@ export default function Home() {
                 gesprek. Een goede vraag wel.
               </p>
               <p>
-                InterVISIE is honderd van die vragen, op honderd kaarten. Je
-                legt de doos op tafel, iemand trekt er een, en je bent binnen
-                twee minuten op een plek waar je met een agendapunt nooit komt.
-                Geen werkvorm om uit te leggen, geen flip-over. Gewoon een
-                kaart.
+                Vandaar de naam. Ik zie ik zie… is het spelletje waarmee je als
+                kind leerde kijken naar wat een ander ziet en jij nog niet.
+                Honderd van die vragen, op honderd kaarten. Je legt de doos op
+                tafel, iemand trekt er een, en je bent binnen twee minuten op
+                een plek waar je met een agendapunt nooit komt. Geen werkvorm om
+                uit te leggen, geen flip-over. Gewoon een kaart.
               </p>
             </div>
 
@@ -300,7 +306,7 @@ export default function Home() {
               href="/aanvragen"
               className="mt-8 inline-block rounded-full bg-goud px-8 py-3.5 font-semibold text-paars-diep transition-transform hover:-translate-y-0.5"
             >
-              Vraag InterVISIE aan
+              Vraag het spel aan
             </Link>
           </div>
         </section>

@@ -1,8 +1,9 @@
 /** Plaatshouder-gegevens. Vervang ze via .env.local of hier direct. */
 export const CONTACT_MAIL =
-  process.env.NEXT_PUBLIC_CONTACT_MAIL ?? "hallo@intervisie-spel.nl";
+  process.env.NEXT_PUBLIC_CONTACT_MAIL ?? "hallo@ikzieikzie.nl";
 
-export const SITE_NAAM = "InterVISIE";
+export const SITE_NAAM = "Ik zie ik zie…";
+export const ONDERTEKST = "het intervisiespel";
 
 /**
  * Basis-URL voor canonical links, sitemap en Open Graph-tags. Deze waarde wordt

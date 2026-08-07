@@ -6,12 +6,12 @@ import { CONTACT_MAIL } from "@/lib/site";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 
 export const metadata: Metadata = {
-  title: "Vraag InterVISIE aan",
+  title: "Vraag het spel aan",
   description:
-    "Reserveer InterVISIE, het gesprekskaartspel voor intervisie in de jeugdzorg. Laat je gegevens achter en je hoort het als eerste zodra de eerste oplage klaarligt.",
+    "Reserveer Ik zie ik zie…, het intervisiespel voor de jeugdzorg. Laat je gegevens achter en je hoort het als eerste zodra de eerste oplage klaarligt.",
   alternates: { canonical: "/aanvragen" },
   openGraph: {
-    title: "Vraag InterVISIE aan",
+    title: "Vraag het spel aan",
     description:
       "Reserveer het gesprekskaartspel voor intervisie in de jeugdzorg. Geen betaling, alleen een seintje zodra het klaarligt.",
     url: "/aanvragen",
@@ -27,7 +27,7 @@ export default function AanvragenPagina() {
         <div className="mx-auto max-w-2xl">
           <header className="mb-10">
             <h1 className="font-serif text-4xl tracking-tight sm:text-5xl">
-              Vraag <span className="krijt-lijn">InterVISIE</span> aan
+              Vraag het <span className="krijt-lijn">spel</span> aan
             </h1>
             <p className="mt-5 text-base leading-relaxed text-paars-diep/80 sm:text-lg">
               De eerste oplage is in de maak. Vul hieronder in hoeveel
@@ -40,7 +40,7 @@ export default function AanvragenPagina() {
           <AanvraagFormulier contactMail={CONTACT_MAIL} />
 
           <p className="mt-8 text-sm leading-relaxed text-paars-diep/60">
-            We gebruiken je gegevens alleen om je over InterVISIE te mailen.
+            We gebruiken je gegevens alleen om je over het spel te mailen.
             Niet doorverkopen, niet in een marketingfunnel. Wil je eruit? Eén
             mailtje naar{" "}
             <a

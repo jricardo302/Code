@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 
 export const alt =
-  "InterVISIE — het kaartspel voor wie ándere mensen begeleidt";
+  "Ik zie ik zie… — het intervisiespel voor de jeugdzorg";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -35,38 +35,41 @@ export default function OgAfbeelding() {
         <div
           style={{
             display: "flex",
-            marginTop: 26,
-            fontSize: 128,
+            marginTop: 30,
+            fontSize: 116,
             fontWeight: 700,
             color: "#3B1E4A",
-            letterSpacing: -4,
+            letterSpacing: -3,
           }}
         >
-          inter
-          <span style={{ color: "#8B5FBF" }}>VISIE</span>
+          ik zie&nbsp;
+          <span style={{ color: "#8B5FBF" }}>ik zie</span>
+          <span style={{ color: "#C9A227" }}>…</span>
         </div>
 
         <div
           style={{
             display: "flex",
-            marginTop: 18,
-            fontSize: 40,
+            marginTop: 22,
+            fontSize: 34,
+            letterSpacing: 10,
+            fontWeight: 600,
             color: "#3B1E4A",
-            opacity: 0.85,
+            opacity: 0.75,
           }}
         >
-          het kaartspel voor wie ándere mensen begeleidt
+          HET INTERVISIESPEL
         </div>
 
-        <div style={{ display: "flex", gap: 14, marginTop: 48 }}>
+        <div style={{ display: "flex", gap: 14, marginTop: 44 }}>
           {["#C9A8E0", "#8B5FBF", "#3B1E4A"].map((kleur, index) => (
             <div
               key={kleur}
               style={{
                 display: "flex",
-                width: 200 + index * 60,
-                height: 22,
-                borderRadius: 11,
+                width: 180 + index * 60,
+                height: 20,
+                borderRadius: 10,
                 background: kleur,
               }}
             />
@@ -76,13 +79,13 @@ export default function OgAfbeelding() {
         <div
           style={{
             display: "flex",
-            marginTop: 40,
+            marginTop: 38,
             fontSize: 26,
             color: "#3B1E4A",
             opacity: 0.6,
           }}
         >
-          Voor intervisie in de jeugdzorg
+          Voor behandelaren en begeleiders in de jeugdzorg
         </div>
       </div>
     ),

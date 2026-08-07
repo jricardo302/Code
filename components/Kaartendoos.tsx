@@ -98,7 +98,7 @@ function Merkteken({
   );
 }
 
-/** Het woordmerk in bladgoud, gestapeld op twee regels. */
+/** Het woordmerk in bladgoud: twee regels naam, daaronder het onderschrift. */
 function Woordmerk({
   x,
   y,
@@ -112,17 +112,21 @@ function Woordmerk({
 }) {
   return (
     <g className="font-serif" fill="url(#folie)" textAnchor="middle">
-      <text x={x} y={y} fontSize={grootte} fontWeight="400">
-        inter
+      <text x={x} y={y} fontSize={grootte}>
+        ik zie
+      </text>
+      <text x={x} y={y + regelhoogte} fontSize={grootte}>
+        ik zie…
       </text>
       <text
         x={x}
-        y={y + regelhoogte}
-        fontSize={grootte * 1.26}
-        fontWeight="700"
-        letterSpacing={grootte * 0.03}
+        y={y + regelhoogte * 1.68}
+        className="font-sans"
+        fontSize={grootte * 0.26}
+        fontWeight="600"
+        letterSpacing={grootte * 0.055}
       >
-        VISIE
+        HET INTERVISIESPEL
       </text>
     </g>
   );
@@ -133,7 +137,7 @@ export function Kaartendoos() {
     <svg
       viewBox="36 66 508 392"
       role="img"
-      aria-label="De kaartendoos van InterVISIE: een diep paars geschenkdoosje met het woordmerk in goudfolie, met daarvoor een kaartrug en een vraagkaart."
+      aria-label="De kaartendoos van Ik zie ik zie…, het intervisiespel: een diep paars geschenkdoosje met het woordmerk in goudfolie, met daarvoor een kaartrug en een vraagkaart."
       className="-mx-[8%] h-auto w-[116%] max-w-none transition-transform duration-700 ease-out hover:-translate-y-1.5 sm:mx-auto sm:w-full sm:max-w-3xl"
     >
       <defs>
@@ -242,11 +246,11 @@ export function Kaartendoos() {
       <g transform={DEKSEL}>
         <Woordmerk
           x={LENGTE_MM / 2}
-          y={56}
-          grootte={17}
-          regelhoogte={23}
+          y={48}
+          grootte={26}
+          regelhoogte={28}
         />
-        <Merkteken x={LENGTE_MM / 2} y={90} schaal={0.95} />
+        <Merkteken x={LENGTE_MM / 2} y={113} schaal={0.9} />
       </g>
 
       {/* --- de kaartrug -------------------------------------------------- */}
@@ -284,9 +288,9 @@ export function Kaartendoos() {
           stroke="url(#folie)"
           strokeWidth="0.9"
         />
-        <Woordmerk x={KAART_L / 2} y={43} grootte={13} regelhoogte={17} />
+        <Woordmerk x={KAART_L / 2} y={35} grootte={17} regelhoogte={18} />
         {/* Het merkteken staat onderaan, zoals het ornament op de kaartrug */}
-        <Merkteken x={KAART_L / 2} y={82} schaal={0.72} />
+        <Merkteken x={KAART_L / 2} y={84} schaal={0.68} />
       </g>
 
       {/* --- de vraagkaart ------------------------------------------------ */}

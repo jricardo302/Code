@@ -1,7 +1,8 @@
-# InterVISIE
+# Ik zie ik zie…
 
-Landingspagina en aanvraagformulier voor **InterVISIE** — een gesprekskaartspel
-voor behandelaren en begeleiders in de jeugdzorg. 100 vragen, drie niveaus.
+Landingspagina en aanvraagformulier voor **Ik zie ik zie…**, het intervisiespel
+voor behandelaren en begeleiders in de jeugdzorg. Een gesprekskaartspel met
+100 vragen en drie niveaus.
 
 Drie routes:
 
@@ -46,9 +47,9 @@ dan in `data/aanvragen.json` te staan (die map staat in `.gitignore`).
 | `DATABASE_URL`             | in productie     | Postgres-verbinding. Leeg = JSON-bestand                           |
 | `AANVRAGEN_BESTAND`        | nee              | Ander pad voor het JSON-bestand                                    |
 | `NEXT_PUBLIC_SITE_URL`     | aanbevolen       | Volledige URL, voor canonical-links, sitemap en Open Graph-tags    |
-| `NEXT_PUBLIC_CONTACT_MAIL` | nee              | Adres in de footer (standaard `hallo@intervisie-spel.nl`)          |
+| `NEXT_PUBLIC_CONTACT_MAIL` | nee              | Adres in de footer (standaard `hallo@ikzieikzie.nl`)               |
 | `RESEND_API_KEY`           | nee              | Zet de bevestigingsmail aan                                        |
-| `MAIL_AFZENDER`            | bij mail         | Afzender, bijv. `"InterVISIE <hallo@jouwdomein.nl>"`               |
+| `MAIL_AFZENDER`            | bij mail         | Afzender, bijv. `"Ik zie ik zie... <hallo@jouwdomein.nl>"`          |
 | `MAIL_KOPIE_NAAR`          | nee              | Krijgt een seintje bij elke nieuwe aanvraag                        |
 
 `POSTGRES_URL` werkt ook — handig als je de Vercel Postgres-integratie gebruikt,
@@ -111,7 +112,7 @@ Download eerst de CSV via `/beheer` — dat is de makkelijkste weg naar `COPY`.
 4. Zet onder **Settings → Environment Variables** minimaal:
    - `BEHEER_WACHTWOORD` — verzin iets langs
    - `DATABASE_URL` (of laat de Vercel-integratie `POSTGRES_URL` zetten)
-   - `NEXT_PUBLIC_SITE_URL` — bijv. `https://intervisie.nl`
+   - `NEXT_PUBLIC_SITE_URL` — bijv. `https://ikzieikzie.nl`
    - `NEXT_PUBLIC_CONTACT_MAIL` — het adres dat in de footer moet staan
 5. Deploy. Klaar.
 
@@ -177,7 +178,7 @@ app/
     export/route.ts           CSV-download
 components/
   Kaartendoos.tsx             voor- en achterkant van de doos in SVG
-  Merk.tsx                    woordmerk, header, footer
+  Merk.tsx                    woordmerk + ondertekst, header, footer
 lib/
   schema.ts                   zod-schema, gedeeld door client en server
   store/                      json- en postgres-driver achter één interface

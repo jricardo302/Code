@@ -1,4 +1,4 @@
-# InterVISIE — kleuren
+# Ik zie ik zie… — kleuren
 
 Het palet zoals het nu in de site zit, waar elke kleur wordt gebruikt, en wat
 het contrast doet. Dit bestand is de referentie; de kleuren zelf staan in

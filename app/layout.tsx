@@ -19,13 +19,14 @@ const nunito = Nunito_Sans({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "InterVISIE — gesprekskaartspel voor intervisie in de jeugdzorg",
-    template: "%s · InterVISIE",
+    default: "Ik zie ik zie… — het intervisiespel voor de jeugdzorg",
+    template: "%s · Ik zie ik zie…",
   },
   description:
-    "InterVISIE is een gesprekskaartspel voor behandelaren en begeleiders in de jeugdzorg. 100 vragen, drie niveaus — van luchtige ijsbreker tot echte reflectie. Bruikbaar voor je verplichte intervisie en je SKJ-herregistratie.",
+    "Ik zie ik zie… is het intervisiespel voor behandelaren en begeleiders in de jeugdzorg. Een gesprekskaartspel met 100 vragen en drie niveaus, van luchtige ijsbreker tot echte reflectie. Bruikbaar voor je verplichte intervisie en je SKJ-herregistratie.",
   keywords: [
     "gesprekskaartspel jeugdzorg",
+    "intervisiespel",
     "intervisie jeugdzorg",
     "intervisie kaartspel",
     "SKJ herregistratie intervisie",
@@ -33,22 +34,22 @@ export const metadata: Metadata = {
     "gespreksstarters begeleiders",
     "casuïstiekbespreking",
   ],
-  authors: [{ name: "InterVISIE" }],
+  authors: [{ name: "Ik zie ik zie…" }],
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     locale: "nl_NL",
     url: SITE_URL,
-    siteName: "InterVISIE",
-    title: "InterVISIE — het kaartspel voor wie ándere mensen begeleidt",
+    siteName: "Ik zie ik zie…",
+    title: "Ik zie ik zie… — het kaartspel voor wie ándere mensen begeleidt",
     description:
-      "100 vragen, drie niveaus. Een gesprekskaartspel dat intervisie in de jeugdzorg weer een gesprek maakt in plaats van een verplicht nummer.",
+      "100 vragen, drie niveaus. Het intervisiespel dat intervisie in de jeugdzorg weer een gesprek maakt in plaats van een verplicht nummer.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "InterVISIE — het kaartspel voor wie ándere mensen begeleidt",
+    title: "Ik zie ik zie… — het kaartspel voor wie ándere mensen begeleidt",
     description:
-      "100 vragen, drie niveaus. Gesprekskaartspel voor intervisie in de jeugdzorg.",
+      "100 vragen, drie niveaus. Het intervisiespel voor de jeugdzorg.",
   },
   robots: { index: true, follow: true },
 };

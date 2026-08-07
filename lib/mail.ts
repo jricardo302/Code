@@ -6,7 +6,7 @@ import type { Aanvraag } from "./store";
  *
  * TODO (optioneel): zet deze env-vars om mail aan te zetten.
  *   RESEND_API_KEY   = re_xxxxxxxx      (aanmaken op resend.com/api-keys)
- *   MAIL_AFZENDER    = "InterVISIE <hallo@jouwdomein.nl>"  (geverifieerd domein)
+ *   MAIL_AFZENDER    = "Ik zie ik zie... <hallo@jouwdomein.nl>"  (geverifieerd domein)
  *   MAIL_KOPIE_NAAR  = jij@jouwdomein.nl (optioneel: seintje bij elke aanvraag)
  *
  * Staat RESEND_API_KEY niet ingevuld, dan slaat de site het mailen stilletjes
@@ -53,13 +53,13 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
   try {
     await verstuur({
       to: aanvraag.email,
-      subject: "Je aanvraag voor InterVISIE staat genoteerd",
+      subject: "Je aanvraag staat genoteerd",
       text: [
         `Hoi ${voornaam},`,
         "",
         `Je aanvraag is binnen: ${aanvraag.aantal} ${
           aanvraag.aantal === 1 ? "exemplaar" : "exemplaren"
-        } InterVISIE.`,
+        } keer Ik zie ik zie…`,
         "",
         "Je hoeft nu niets te doen. Zodra de spellen klaarliggen, mailen we je",
         "over levering en prijs. Betalen doe je pas daarna.",
@@ -68,7 +68,7 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
         "deze mail.",
         "",
         "Tot snel,",
-        "InterVISIE",
+        "Ik zie ik zie…",
       ].join("\n"),
     });
 
@@ -76,7 +76,7 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
     if (kopieNaar) {
       await verstuur({
         to: kopieNaar,
-        subject: `Nieuwe InterVISIE-aanvraag: ${aanvraag.naam}`,
+        subject: `Nieuwe aanvraag: ${aanvraag.naam}`,
         text: [
           `Naam:        ${aanvraag.naam}`,
           `E-mail:      ${aanvraag.email}`,
@@ -90,6 +90,6 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
       });
     }
   } catch (fout) {
-    console.error("[InterVISIE] Bevestigingsmail mislukt:", fout);
+    console.error("[ik zie ik zie] Bevestigingsmail mislukt:", fout);
   }
 }
