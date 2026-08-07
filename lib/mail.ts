@@ -53,18 +53,18 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
   try {
     await verstuur({
       to: aanvraag.email,
-      subject: "Je aanvraag staat genoteerd",
+      subject: "Je bestelling staat genoteerd",
       text: [
         `Hoi ${voornaam},`,
         "",
-        `Je aanvraag is binnen: ${aanvraag.aantal} ${
+        `Je bestelling is binnen: ${aanvraag.aantal} ${
           aanvraag.aantal === 1 ? "exemplaar" : "exemplaren"
         } keer Ik zie ik zie…`,
         "",
         "Je hoeft nu niets te doen. Zodra de spellen klaarliggen, mailen we je",
         "over levering en prijs. Betalen doe je pas daarna.",
         "",
-        "Klopt er iets niet, of wil je je aanvraag wijzigen? Reageer gewoon op",
+        "Klopt er iets niet, of wil je je bestelling wijzigen? Reageer gewoon op",
         "deze mail.",
         "",
         "Tot snel,",
@@ -76,7 +76,7 @@ export async function stuurBevestiging(aanvraag: Aanvraag): Promise<void> {
     if (kopieNaar) {
       await verstuur({
         to: kopieNaar,
-        subject: `Nieuwe aanvraag: ${aanvraag.naam}`,
+        subject: `Nieuwe bestelling: ${aanvraag.naam}`,
         text: [
           `Naam:        ${aanvraag.naam}`,
           `E-mail:      ${aanvraag.email}`,

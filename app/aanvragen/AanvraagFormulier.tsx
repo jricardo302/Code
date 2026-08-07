@@ -297,10 +297,10 @@ export function AanvraagFormulier({ contactMail }: { contactMail: string }) {
           disabled={bezig}
           className="w-full shrink-0 rounded-full bg-paars-diep px-8 py-3.5 font-semibold whitespace-nowrap text-creme transition-transform hover:-translate-y-0.5 hover:bg-paars disabled:cursor-wait disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
         >
-          {bezig ? "Even geduld…" : "Verstuur mijn aanvraag"}
+          {bezig ? "Even geduld…" : "Bestellen"}
         </button>
         <p className="text-sm text-paars-diep/60">
-          Geen betaling, geen nieuwsbrief. Alleen bericht als het spel er is.
+          Je betaalt nu nog niets en zit nergens aan vast. Geen nieuwsbrief.
         </p>
       </div>
     </form>

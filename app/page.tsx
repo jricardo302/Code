@@ -111,7 +111,7 @@ export default function Home() {
                 href="/aanvragen"
                 className="w-full rounded-full bg-paars-diep px-8 py-3.5 text-center font-semibold text-creme shadow-[0_10px_24px_-12px_rgba(59,30,74,0.9)] transition-transform hover:-translate-y-0.5 hover:bg-paars sm:w-auto"
               >
-                Vraag het spel aan
+                Bestellen
               </Link>
               <a
                 href="#niveaus"
@@ -298,15 +298,16 @@ export default function Home() {
               De eerste oplage ligt er bijna
             </h2>
             <p className="mx-auto mt-4 max-w-lg text-base leading-relaxed text-creme/80 tekst-balans">
-              Nog niet te koop, wel te reserveren. Laat je gegevens achter en je
-              hoort het als eerste zodra de dozen klaarstaan. Je betaalt nu
-              niets — het is een aanvraag, geen bestelling.
+              De eerste dozen zijn in de maak. Bestel er nu alvast een, dan
+              leggen we &apos;m voor je klaar. Je betaalt pas als het spel er is
+              —
+              eerst krijg je bericht met de prijs en de levertijd.
             </p>
             <Link
               href="/aanvragen"
               className="mt-8 inline-block rounded-full bg-goud px-8 py-3.5 font-semibold text-paars-diep transition-transform hover:-translate-y-0.5"
             >
-              Vraag het spel aan
+              Bestellen
             </Link>
           </div>
         </section>

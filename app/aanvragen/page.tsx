@@ -6,14 +6,14 @@ import { CONTACT_MAIL } from "@/lib/site";
 import { AanvraagFormulier } from "./AanvraagFormulier";
 
 export const metadata: Metadata = {
-  title: "Vraag het spel aan",
+  title: "Bestellen",
   description:
-    "Reserveer Ik zie ik zie…, het intervisiespel voor de jeugdzorg. Laat je gegevens achter en je hoort het als eerste zodra de eerste oplage klaarligt.",
+    "Bestel Ik zie ik zie…, het intervisiespel voor de jeugdzorg. Je betaalt pas als de eerste oplage klaarligt.",
   alternates: { canonical: "/aanvragen" },
   openGraph: {
-    title: "Vraag het spel aan",
+    title: "Bestellen",
     description:
-      "Reserveer het gesprekskaartspel voor intervisie in de jeugdzorg. Geen betaling, alleen een seintje zodra het klaarligt.",
+      "Bestel het intervisiespel voor de jeugdzorg. Je betaalt pas zodra de dozen er zijn.",
     url: "/aanvragen",
   },
 };
@@ -27,13 +27,13 @@ export default function AanvragenPagina() {
         <div className="mx-auto max-w-2xl">
           <header className="mb-10">
             <h1 className="font-serif text-4xl tracking-tight sm:text-5xl">
-              Vraag het <span className="krijt-lijn">spel</span> aan
+              <span className="krijt-lijn">Bestellen</span>
             </h1>
             <p className="mt-5 text-base leading-relaxed text-paars-diep/80 sm:text-lg">
               De eerste oplage is in de maak. Vul hieronder in hoeveel
-              exemplaren je wilt, dan houden we ze voor je apart. Je betaalt nu
-              niets en zit nergens aan vast — we mailen je zodra de dozen er
-              zijn, met de prijs en de levertijd erbij.
+              exemplaren je wilt, dan leggen we ze voor je klaar. Je betaalt nu
+              nog niets: zodra de dozen er zijn mailen we je met de prijs en de
+              levertijd, en pas daarna reken je af.
             </p>
           </header>
 

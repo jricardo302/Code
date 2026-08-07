@@ -57,7 +57,7 @@ export function SiteHeader() {
           href="/aanvragen"
           className="shrink-0 rounded-full border border-paars-diep/15 bg-paars-diep px-4 py-2 text-sm font-semibold whitespace-nowrap text-creme transition-colors hover:bg-paars sm:px-5"
         >
-          Vraag het spel aan
+          Bestellen
         </Link>
       </div>
     </header>
