@@ -45,3 +45,6 @@ next-env.d.ts
 
 # Voorbeeldconfiguratie mag wel mee de repo in
 !.env.example
+
+# Gegenereerde printbestanden (afgeleid van scripts/)
+/print

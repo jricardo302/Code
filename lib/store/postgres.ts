@@ -1,6 +1,11 @@
 import { Pool } from "pg";
 
-import type { Aanvraag, AanvraagStore, NieuweAanvraag } from "./types";
+import type {
+  Inzending,
+  InzendingStore,
+  NieuweInzending,
+  Soort,
+} from "./types";
 
 const verbindingsString =
   process.env.DATABASE_URL ?? process.env.POSTGRES_URL ?? "";
@@ -27,17 +32,14 @@ function pool(): Pool {
 function zorgVoorTabel(): Promise<void> {
   globaal.__ikzieikzieMigratie ??= pool()
     .query(
-      `CREATE TABLE IF NOT EXISTS aanvragen (
+      `CREATE TABLE IF NOT EXISTS inzendingen (
          id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-         naam          text NOT NULL,
-         email         text NOT NULL,
-         organisatie   text,
-         functie       text,
-         aantal        integer NOT NULL DEFAULT 1,
-         doelen        text[] NOT NULL DEFAULT '{}',
-         opmerking     text,
+         soort         text NOT NULL,
+         gegevens      jsonb NOT NULL DEFAULT '{}'::jsonb,
          aangemaakt_op timestamptz NOT NULL DEFAULT now()
-       )`,
+       );
+       CREATE INDEX IF NOT EXISTS inzendingen_soort_datum
+         ON inzendingen (soort, aangemaakt_op DESC);`,
     )
     .then(() => undefined)
     .catch((fout) => {
@@ -50,57 +52,44 @@ function zorgVoorTabel(): Promise<void> {
 
 type Rij = {
   id: string;
-  naam: string;
-  email: string;
-  organisatie: string | null;
-  functie: string | null;
-  aantal: number;
-  doelen: string[] | null;
-  opmerking: string | null;
+  soort: string;
+  gegevens: Record<string, unknown> | null;
   aangemaakt_op: Date;
 };
 
-function naarAanvraag(rij: Rij): Aanvraag {
+function naarInzending(rij: Rij): Inzending {
   return {
     id: rij.id,
-    naam: rij.naam,
-    email: rij.email,
-    organisatie: rij.organisatie,
-    functie: rij.functie,
-    aantal: rij.aantal,
-    doelen: rij.doelen ?? [],
-    opmerking: rij.opmerking,
+    soort: rij.soort as Soort,
+    gegevens: rij.gegevens ?? {},
     aangemaaktOp: rij.aangemaakt_op.toISOString(),
   };
 }
 
-export const postgresStore: AanvraagStore = {
+export const postgresStore: InzendingStore = {
   naam: "postgres",
 
-  async bewaar(invoer: NieuweAanvraag) {
+  async bewaar(invoer: NieuweInzending) {
     await zorgVoorTabel();
     const { rows } = await pool().query<Rij>(
-      `INSERT INTO aanvragen (naam, email, organisatie, functie, aantal, doelen, opmerking)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)
+      `INSERT INTO inzendingen (soort, gegevens)
+       VALUES ($1, $2)
        RETURNING *`,
-      [
-        invoer.naam,
-        invoer.email,
-        invoer.organisatie,
-        invoer.functie,
-        invoer.aantal,
-        invoer.doelen,
-        invoer.opmerking,
-      ],
+      [invoer.soort, JSON.stringify(invoer.gegevens)],
     );
-    return naarAanvraag(rows[0]);
+    return naarInzending(rows[0]);
   },
 
-  async lijst() {
+  async lijst(soort?: Soort) {
     await zorgVoorTabel();
-    const { rows } = await pool().query<Rij>(
-      "SELECT * FROM aanvragen ORDER BY aangemaakt_op DESC",
-    );
-    return rows.map(naarAanvraag);
+    const { rows } = soort
+      ? await pool().query<Rij>(
+          "SELECT * FROM inzendingen WHERE soort = $1 ORDER BY aangemaakt_op DESC",
+          [soort],
+        )
+      : await pool().query<Rij>(
+          "SELECT * FROM inzendingen ORDER BY aangemaakt_op DESC",
+        );
+    return rows.map(naarInzending);
   },
 };
