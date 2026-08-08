@@ -7,7 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: "/beheer",
+      // Het beheeroverzicht, de betaalterugkeer en de API horen niet in de index.
+      disallow: ["/beheer", "/bestellen", "/api"],
     },
     sitemap: `${SITE_URL}/sitemap.xml`,
   };

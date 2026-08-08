@@ -2,18 +2,23 @@ import { randomUUID } from "node:crypto";
 import { mkdir, readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import type { Aanvraag, AanvraagStore, NieuweAanvraag } from "./types";
+import type {
+  Inzending,
+  InzendingStore,
+  NieuweInzending,
+  Soort,
+} from "./types";
 
 // De turbopackIgnore hieronder houdt de build-tracer rustig: dit pad wordt pas
 // tijdens runtime bepaald, niet tijdens de build.
 const bestandsPad = path.resolve(
-  /* turbopackIgnore: true */ process.env.AANVRAGEN_BESTAND ??
-    "data/aanvragen.json",
+  /* turbopackIgnore: true */ process.env.INZENDINGEN_BESTAND ??
+    "data/inzendingen.json",
 );
 
 /**
  * Serieel schrijven. Node draait één request niet per se alleen, dus zonder
- * deze wachtrij kan een gelijktijdige aanvraag de vorige overschrijven.
+ * deze wachtrij kan een gelijktijdige inzending de vorige overschrijven.
  */
 let ketting: Promise<unknown> = Promise.resolve();
 
@@ -23,46 +28,46 @@ function inDeRij<T>(taak: () => Promise<T>): Promise<T> {
   return resultaat;
 }
 
-async function lees(): Promise<Aanvraag[]> {
+async function lees(): Promise<Inzending[]> {
   try {
     const inhoud = await readFile(bestandsPad, "utf8");
     const data: unknown = JSON.parse(inhoud);
-    return Array.isArray(data) ? (data as Aanvraag[]) : [];
+    return Array.isArray(data) ? (data as Inzending[]) : [];
   } catch (fout) {
     if ((fout as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw fout;
   }
 }
 
-async function schrijf(aanvragen: Aanvraag[]): Promise<void> {
+async function schrijf(inzendingen: Inzending[]): Promise<void> {
   await mkdir(path.dirname(bestandsPad), { recursive: true });
   // Eerst naar een tijdelijk bestand, dan hernoemen: nooit een half bestand.
   const tijdelijk = `${bestandsPad}.${process.pid}.tmp`;
-  await writeFile(tijdelijk, `${JSON.stringify(aanvragen, null, 2)}\n`, "utf8");
+  await writeFile(tijdelijk, `${JSON.stringify(inzendingen, null, 2)}\n`, "utf8");
   await rename(tijdelijk, bestandsPad);
 }
 
-export const jsonStore: AanvraagStore = {
+export const jsonStore: InzendingStore = {
   naam: "json",
 
-  async bewaar(invoer: NieuweAanvraag) {
+  async bewaar(invoer: NieuweInzending) {
     return inDeRij(async () => {
-      const aanvragen = await lees();
-      const aanvraag: Aanvraag = {
+      const inzendingen = await lees();
+      const inzending: Inzending = {
         ...invoer,
         id: randomUUID(),
         aangemaaktOp: new Date().toISOString(),
       };
-      aanvragen.push(aanvraag);
-      await schrijf(aanvragen);
-      return aanvraag;
+      inzendingen.push(inzending);
+      await schrijf(inzendingen);
+      return inzending;
     });
   },
 
-  async lijst() {
-    const aanvragen = await lees();
-    return aanvragen.sort((a, b) =>
-      b.aangemaaktOp.localeCompare(a.aangemaaktOp),
-    );
+  async lijst(soort?: Soort) {
+    const inzendingen = await lees();
+    return inzendingen
+      .filter((inzending) => !soort || inzending.soort === soort)
+      .sort((a, b) => b.aangemaaktOp.localeCompare(a.aangemaaktOp));
   },
 };

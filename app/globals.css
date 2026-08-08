@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
+/* ---------------------------------------------------------------------------
+   IK ZIE, IK ZIE… — designtokens
+
+   Eén palet voor web, kaart en doos. De hexwaarden zijn dezelfde als in
+   design/brand-guide.md en scripts/kaarten.mjs; wijzig ze op één plek en
+   neem de wijziging daar over.
+
+   Geen goud, geen geel, geen puur wit. Kaartfronten zijn crème (#F7F2E7).
+--------------------------------------------------------------------------- */
+
 @theme inline {
-  /* Paars-palet: van licht lila (niveau 1) naar diep paars (niveau 3) */
-  --color-lila: #c9a8e0;
-  --color-paars: #8b5fbf;
   --color-paars-diep: #3b1e4a;
-  --color-goud: #c9a227;
-
-  /* Warme kraft-achtergronden */
-  --color-creme: #f5f0e4;
+  --color-paars-zacht: #4e2b60;
+  --color-doos-donker: #2e1738;
+  --color-doos-licht: #4a2a5c;
+  --color-paars: #8b5fbf;
+  --color-lila: #c9a8e0;
+  --color-lila-bleek: #e9dcf3;
+  --color-creme: #f7f2e7;
   --color-kraft: #efe3cc;
+  --color-inkt: #2b1733;
 
-  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --font-merk: var(--font-figtree), "Mont Heavy", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
@@ -22,19 +34,22 @@
 
   body {
     background-color: var(--color-creme);
-    color: var(--color-paars-diep);
+    color: var(--color-inkt);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    /* Zware typografie heeft lucht nodig om leesbaar te blijven. */
+    line-height: 1.65;
   }
 
-  /* Kraftpapier: een fijne, onregelmatige korrel over de hele pagina. */
+  /* Kraftpapier: een fijne korrel over de hele pagina, net genoeg om het
+     vlakke wit-gevoel weg te halen zonder de tekst te storen. */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.5;
+    opacity: 0.4;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
   }
 
@@ -43,24 +58,90 @@
     color: var(--color-paars-diep);
   }
 
+  /* Zichtbaar in beide richtingen: op crème én op diep paars. */
   :focus-visible {
-    outline: 2px solid var(--color-paars);
+    outline: 3px solid var(--color-paars);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 4px;
+  }
+
+  .op-donker :focus-visible {
+    outline-color: var(--color-lila);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-merk);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    /* Nederlands zit vol samenstellingen — "jeugdhulpprofessionals" past in
+       900 op 36px niet op een telefoon van 390px breed. Afbreken volgens de
+       Nederlandse regels (het <html>-element staat op lang="nl"), en als dat
+       niet lukt hard breken in plaats van de pagina laten uitsteken. */
+    hyphens: auto;
+    overflow-wrap: break-word;
+  }
+
+  /* Zelfde verhaal voor lopende tekst: een lange URL of vakterm mag nooit
+     horizontale scroll opleveren. */
+  p,
+  li,
+  dd,
+  dt {
+    overflow-wrap: break-word;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Hulpklassen
+--------------------------------------------------------------------------- */
 
 @utility tekst-balans {
   text-wrap: balance;
 }
 
-/* Handgetekend ogende onderstreping voor accentwoorden in koppen. */
-@utility krijt-lijn {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8.5c22-4 42-5 62-3.5s34 2 54-1' stroke='%23C9A227' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+@utility tekst-mooi {
+  text-wrap: pretty;
+}
+
+/* Het merkaccent onder een woord: een zachte lila streep in plaats van een
+   onderstreping. Nooit goud.
+
+   De hoogte zit in `background-size` en niet in de gradient-stops — anders
+   vult de achtergrond de hele regelbox en heeft `background-position` geen
+   effect meer, wat een balk áchter de tekst oplevert in plaats van een streep
+   eronder. `box-decoration-break: clone` zorgt dat een over twee regels
+   afgebroken kop op beide regels een streep krijgt. */
+@utility merk-streep {
+  background-image: linear-gradient(var(--color-lila), var(--color-lila));
   background-repeat: no-repeat;
-  background-position: 0 88%;
-  background-size: 100% 0.45em;
-  padding-bottom: 0.08em;
+  background-size: 100% 0.16em;
+  background-position: 0 100%;
+  padding-bottom: 0.12em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+/* Verloop van de doos, ook gebruikt voor donkere secties. */
+@utility doos-verloop {
+  background-image: linear-gradient(
+    160deg,
+    var(--color-doos-licht) 0%,
+    var(--color-doos-donker) 62%,
+    #24122c 100%
+  );
+}
+
+/* Rand die een gestanste kaart nabootst. */
+@utility kaartrand {
+  border-radius: 1rem;
+  box-shadow:
+    0 1px 0 rgb(255 255 255 / 0.25) inset,
+    0 18px 40px -28px rgb(43 23 51 / 0.85);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -72,6 +153,13 @@
   *::before,
   *::after {
     animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  body::before {
+    display: none;
   }
 }

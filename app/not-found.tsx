@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { SiteFooter, SiteHeader } from "@/components/Merk";
+import { KnopLink } from "@/components/ui";
 import { CONTACT_MAIL } from "@/lib/site";
 
 export default function NietGevonden() {
@@ -8,24 +9,34 @@ export default function NietGevonden() {
     <>
       <SiteHeader />
 
-      <main className="flex flex-1 items-center px-5 py-24">
+      <main id="inhoud" className="flex flex-1 items-center px-5 py-24">
         <div className="mx-auto max-w-lg text-center">
-          <p aria-hidden className="font-serif text-6xl font-bold text-goud">
+          <p aria-hidden className="font-merk text-6xl font-black text-lila">
             404
           </p>
-          <h1 className="mt-5 font-serif text-3xl tracking-tight sm:text-4xl">
+          <h1 className="mt-5 text-3xl sm:text-4xl">
             Deze kaart zit niet in de doos
           </h1>
-          <p className="mt-4 leading-relaxed text-paars-diep/75">
-            De pagina die je zoekt bestaat niet (meer). Geen ramp — de andere
-            honderd liggen er nog wel.
+          <p className="mt-4 leading-relaxed text-inkt/75 tekst-mooi">
+            De pagina die je zoekt bestaat niet, of niet meer. De andere honderd
+            liggen er nog wel.
           </p>
-          <Link
-            href="/"
-            className="mt-8 inline-block rounded-full bg-paars-diep px-7 py-3 font-semibold text-creme transition-colors hover:bg-paars"
-          >
-            Terug naar de homepage
-          </Link>
+          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <KnopLink href="/">Terug naar de homepage</KnopLink>
+            <KnopLink href="/intervisie" variant="rand">
+              Bekijk het spel
+            </KnopLink>
+          </div>
+          <p className="mt-8 text-sm text-inkt/55">
+            Denk je dat hier wél iets hoort te staan? Mail{" "}
+            <Link
+              href="/contact"
+              className="font-semibold text-paars underline underline-offset-2"
+            >
+              via de contactpagina
+            </Link>
+            .
+          </p>
         </div>
       </main>
 

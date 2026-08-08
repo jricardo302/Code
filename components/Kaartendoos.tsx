@@ -1,344 +1,264 @@
+import { Kaart, KaartAchterkant } from "@/components/Kaart";
+import { voorbeelden } from "@/lib/kaarten";
+
 /**
- * De kaartendoos als productshot: een breed, plat geschenkdoosje met
- * magneetsluiting in isometrisch perspectief, met twee kaarten ervoor.
+ * Productbeeld zonder fotografie.
  *
- * Alles is met de hand in SVG geconstrueerd. De drie zichtbare vlakken worden
- * opgespannen door twee vectoren, en tekst en kaders krijgen diezelfde matrix
- * mee — zo liggen ze écht in het vlak in plaats van er los overheen te zweven.
+ * Er zijn nog geen foto's — de eerste oplage is niet gedrukt. In plaats van
+ * een stockfoto of een gerenderde nepfoto tekenen we de doos in SVG: dezelfde
+ * maten, dezelfde kleuren en dezelfde typografie als het printbestand. Zodra
+ * er echte fotografie is vervang je deze component en verder niets.
+ *
+ * De doos is een magnetische klapdoos van 132 × 80 × 42 mm (zie
+ * design/print-specs.md). De verhoudingen hieronder komen daarvandaan.
  */
 
-type Punt = [number, number];
+const VERLOOP = (
+  <>
+    <linearGradient id="doosverloop" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stopColor="#4A2A5C" />
+      <stop offset="62%" stopColor="#2E1738" />
+      <stop offset="100%" stopColor="#24122C" />
+    </linearGradient>
+    <linearGradient id="zijverloop" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stopColor="#24122C" />
+      <stop offset="100%" stopColor="#3B1E4A" />
+    </linearGradient>
+    <linearGradient id="glans" x1="0" y1="0" x2="0.7" y2="1">
+      <stop offset="0%" stopColor="#C9A8E0" stopOpacity="0.22" />
+      <stop offset="55%" stopColor="#C9A8E0" stopOpacity="0" />
+    </linearGradient>
+  </>
+);
 
-// --- vectorrekenwerk ---------------------------------------------------------
-
-const plus = (...punten: Punt[]): Punt =>
-  punten.reduce<Punt>((a, b) => [a[0] + b[0], a[1] + b[1]], [0, 0]);
-
-const maal = (p: Punt, k: number): Punt => [p[0] * k, p[1] * k];
-
-const eenheid = (p: Punt): Punt => {
-  const l = Math.hypot(p[0], p[1]);
-  return [p[0] / l, p[1] / l];
-};
-
-const vorm = (punten: Punt[]) =>
-  punten.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
-
-/**
- * Bouwt de transform waarmee je "plat" kunt tekenen in een gekanteld vlak.
- * Lokale x loopt langs `u`, lokale y langs `v`, in dezelfde eenheden.
- */
-const vlak = (oorsprong: Punt, u: Punt, v: Punt) =>
-  `matrix(${[...eenheid(u), ...eenheid(v), ...oorsprong]
-    .map((n) => n.toFixed(4))
-    .join(" ")})`;
-
-// --- afmetingen van de doos --------------------------------------------------
-
-const LENGTE: Punt = [300, 100]; // lange as, naar rechtsonder
-const DIEPTE: Punt = [128, -66]; // korte as, naar rechtsboven
-const HOOGTE = 50;
-const DEKSELRAND = 19; // hoogte van het deksel; daaronder zit de bak
-
-const A: Punt = [96, 150]; // voorste linkerhoek van het deksel
-const B = plus(A, LENGTE);
-const C = plus(B, DIEPTE);
-const D = plus(A, DIEPTE);
-const Ah = plus(A, [0, HOOGTE]);
-const Bh = plus(B, [0, HOOGTE]);
-const Ch = plus(C, [0, HOOGTE]);
-const Dh = plus(D, [0, HOOGTE]);
-
-const LENGTE_MM = Math.hypot(...LENGTE); // 316 lokale eenheden
-const DIEPTE_MM = Math.hypot(...DIEPTE); // 144 lokale eenheden
-
-// Bij het deksel loopt lokale y naar de kijker toe, zodat regels naar voren
-// stapelen — net als de opdruk op de foto.
-const DEKSEL = vlak(D, LENGTE, maal(DIEPTE, -1));
-const VOORKANT = vlak(A, LENGTE, [0, 1]);
-const ZIJKANT = vlak(B, DIEPTE, [0, 1]);
-
-// --- kaarten -----------------------------------------------------------------
-
-const KAART_L = 158;
-const KAART_B = 106;
-
-const kaartVlak = (achterhoek: Punt) =>
-  vlak(achterhoek, LENGTE, maal(DIEPTE, -1));
-
-const RUG_KAART = kaartVlak([150, 300]);
-const VRAAG_KAART = kaartVlak([348, 336]);
-
-// --- onderdelen --------------------------------------------------------------
-
-/** Drie oplopende streepjes in goudfolie: het merkteken voor de drie niveaus. */
-function Merkteken({
-  x,
-  y,
-  schaal = 1,
-}: {
-  x: number;
-  y: number;
-  schaal?: number;
-}) {
-  return (
-    <g transform={`translate(${x} ${y}) scale(${schaal})`}>
-      {[8, 13, 18].map((breedte, index) => (
-        <rect
-          key={breedte}
-          x={-breedte / 2}
-          y={index * 4.6}
-          width={breedte}
-          height={1.7}
-          rx={0.85}
-          fill="url(#folie)"
-        />
-      ))}
-    </g>
-  );
-}
-
-/** Het woordmerk in bladgoud: twee regels naam, daaronder het onderschrift. */
-function Woordmerk({
-  x,
-  y,
-  grootte,
-  regelhoogte,
-}: {
-  x: number;
-  y: number;
-  grootte: number;
-  regelhoogte: number;
-}) {
-  return (
-    <g className="font-serif" fill="url(#folie)" textAnchor="middle">
-      <text x={x} y={y} fontSize={grootte}>
-        ik zie
-      </text>
-      <text x={x} y={y + regelhoogte} fontSize={grootte}>
-        ik zie…
-      </text>
-      <text
-        x={x}
-        y={y + regelhoogte * 1.68}
-        className="font-sans"
-        fontSize={grootte * 0.26}
-        fontWeight="600"
-        letterSpacing={grootte * 0.055}
-      >
-        HET INTERVISIESPEL
-      </text>
-    </g>
-  );
-}
-
-export function Kaartendoos() {
+/** De gesloten doos, recht van voren. Dit is het hoofd-productbeeld. */
+export function DoosVoorkant({ className = "" }: { className?: string }) {
   return (
     <svg
-      viewBox="36 66 508 392"
+      viewBox="0 0 330 200"
       role="img"
-      aria-label="De kaartendoos van Ik zie ik zie…, het intervisiespel: een diep paars geschenkdoosje met het woordmerk in goudfolie, met daarvoor een kaartrug en een vraagkaart."
-      className="-mx-[8%] h-auto w-[116%] max-w-none transition-transform duration-700 ease-out hover:-translate-y-1.5 sm:mx-auto sm:w-full sm:max-w-3xl"
+      aria-label="De doos van IK ZIE, IK ZIE… INTERVISIE: een matte, diep paarse magneetdoos met crème belettering."
+      className={className}
+    >
+      <defs>{VERLOOP}</defs>
+
+      <rect
+        x="1"
+        y="1"
+        width="328"
+        height="198"
+        rx="8"
+        fill="url(#doosverloop)"
+      />
+      <rect
+        x="1"
+        y="1"
+        width="328"
+        height="198"
+        rx="8"
+        fill="url(#glans)"
+      />
+      {/* Crème keylijn, ruim binnen de snijlijn zodat hij het stansen overleeft. */}
+      <rect
+        x="14"
+        y="14"
+        width="302"
+        height="172"
+        rx="4"
+        fill="none"
+        stroke="#F7F2E7"
+        strokeOpacity="0.28"
+      />
+
+      <text
+        x="165"
+        y="82"
+        textAnchor="middle"
+        fill="#F7F2E7"
+        fontFamily="var(--font-merk)"
+        fontWeight="900"
+        fontSize="30"
+        letterSpacing="-0.6"
+      >
+        IK ZIE, IK ZIE…
+      </text>
+
+      <text
+        x="165"
+        y="112"
+        textAnchor="middle"
+        fontFamily="var(--font-merk)"
+        fontWeight="900"
+        fontSize="17"
+        letterSpacing="5"
+      >
+        <tspan fill="#F7F2E7">INTER</tspan>
+        <tspan fill="#C9A8E0">VISIE</tspan>
+      </text>
+
+      <line
+        x1="128"
+        y1="128"
+        x2="202"
+        y2="128"
+        stroke="#C9A8E0"
+        strokeOpacity="0.55"
+      />
+
+      <text
+        x="165"
+        y="152"
+        textAnchor="middle"
+        fill="#F7F2E7"
+        fillOpacity="0.72"
+        fontFamily="var(--font-sans)"
+        fontWeight="600"
+        fontSize="9.5"
+        letterSpacing="1.4"
+      >
+        100 VRAGEN VOOR GESPREKKEN DIE VERDER KIJKEN
+      </text>
+    </svg>
+  );
+}
+
+/**
+ * De doos in perspectief met de zijkant erbij, zoals hij op tafel ligt.
+ * Twee vlakken, handmatig geplaatst — geen 3D-bibliotheek voor één beeld.
+ */
+export function DoosPerspectief({ className = "" }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 420 260"
+      role="img"
+      aria-label="De doos van IK ZIE, IK ZIE… INTERVISIE schuin van voren, met de zijkant waarop KIJK. VRAAG. REFLECTEER. staat."
+      className={className}
     >
       <defs>
-        {/* Bladgoud: licht aan de bovenkant, dieper naar onderen. */}
-        <linearGradient id="folie" x1="0" y1="0" x2="0.3" y2="1">
-          <stop offset="0%" stopColor="#F4E09B" />
-          <stop offset="34%" stopColor="#DDBB4E" />
-          <stop offset="70%" stopColor="#C9A227" />
-          <stop offset="100%" stopColor="#A8831A" />
-        </linearGradient>
-
-        <linearGradient id="deksel" x1="0.1" y1="0" x2="0.9" y2="1">
-          <stop offset="0%" stopColor="#4E2964" />
-          <stop offset="100%" stopColor="#3D1F4E" />
-        </linearGradient>
-
-        <linearGradient id="voorvlak" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#3A1E49" />
-          <stop offset="100%" stopColor="#2C1637" />
-        </linearGradient>
-
-        <linearGradient id="karton" x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0%" stopColor="#FCF9F0" />
-          <stop offset="100%" stopColor="#EFE7D3" />
-        </linearGradient>
-
-        <filter id="slagschaduw" x="-40%" y="-40%" width="190%" height="220%">
-          <feGaussianBlur stdDeviation="15" />
-        </filter>
-
-        <filter id="kaartschaduw" x="-30%" y="-40%" width="170%" height="200%">
-          <feGaussianBlur stdDeviation="5" />
+        {VERLOOP}
+        <filter id="schaduw" x="-20%" y="-20%" width="140%" height="150%">
+          <feDropShadow
+            dx="0"
+            dy="16"
+            stdDeviation="18"
+            floodColor="#2B1733"
+            floodOpacity="0.45"
+          />
         </filter>
       </defs>
 
-      {/* Schaduw van de doos, naar rechtsonder weglopend */}
-      <g filter="url(#slagschaduw)" opacity="0.45">
-        <polygon
-          points={vorm([
-            plus(Ah, [20, 12]),
-            plus(Bh, [38, 15]),
-            plus(Ch, [52, 7]),
-            plus(Dh, [34, 5]),
-          ])}
-          fill="#150919"
+      <g filter="url(#schaduw)">
+        {/* Zijkant (de dikte van de doos) */}
+        <path
+          d="M40 62 L40 214 L84 236 L84 84 Z"
+          fill="url(#zijverloop)"
         />
+        {/* Voorvlak */}
+        <path
+          d="M84 84 L84 236 L392 194 L392 42 Z"
+          fill="url(#doosverloop)"
+        />
+        <path d="M84 84 L84 236 L392 194 L392 42 Z" fill="url(#glans)" />
+        {/* Bovenkant (het klapdeksel) */}
+        <path d="M40 62 L84 84 L392 42 L349 22 Z" fill="#4A2A5C" />
       </g>
 
-      {/* --- de doos ---------------------------------------------------- */}
-
-      <polygon points={vorm([A, B, Bh, Ah])} fill="url(#voorvlak)" />
-      <polygon points={vorm([B, C, Ch, Bh])} fill="#241130" />
-      <polygon points={vorm([D, C, B, A])} fill="url(#deksel)" />
-
-      {/* De naad tussen deksel en bak, plus een fijne gouden randlijn */}
-      <g transform={VOORKANT}>
-        <rect
-          y={DEKSELRAND}
-          width={LENGTE_MM}
-          height={HOOGTE - DEKSELRAND}
-          fill="#000"
-          opacity="0.16"
-        />
-        <line
-          x1="0"
-          y1={DEKSELRAND}
-          x2={LENGTE_MM}
-          y2={DEKSELRAND}
-          stroke="#150919"
-          strokeWidth="0.7"
-          opacity="0.7"
-        />
-        <line
-          x1="0"
-          y1="0.5"
-          x2={LENGTE_MM}
-          y2="0.5"
-          stroke="url(#folie)"
-          strokeWidth="0.7"
-          opacity="0.3"
-        />
-        <Merkteken x={LENGTE_MM / 2} y={DEKSELRAND / 2 - 5} schaal={0.6} />
-      </g>
-
-      <g transform={ZIJKANT}>
-        <rect
-          y={DEKSELRAND}
-          width={DIEPTE_MM}
-          height={HOOGTE - DEKSELRAND}
-          fill="#000"
-          opacity="0.16"
-        />
-        <line
-          x1="0"
-          y1={DEKSELRAND}
-          x2={DIEPTE_MM}
-          y2={DEKSELRAND}
-          stroke="#150919"
-          strokeWidth="0.7"
-          opacity="0.7"
-        />
-        <Merkteken x={DIEPTE_MM / 2} y={DEKSELRAND / 2 - 5} schaal={0.6} />
-      </g>
-
-      {/* Opdruk op het deksel */}
-      <g transform={DEKSEL}>
-        <Woordmerk
-          x={LENGTE_MM / 2}
-          y={48}
-          grootte={26}
-          regelhoogte={28}
-        />
-        <Merkteken x={LENGTE_MM / 2} y={113} schaal={0.9} />
-      </g>
-
-      {/* --- de kaartrug -------------------------------------------------- */}
-
-      <g filter="url(#kaartschaduw)" opacity="0.4">
-        <g transform={RUG_KAART}>
-          <rect
-            x="3"
-            y="7"
-            width={KAART_L}
-            height={KAART_B}
-            rx="7"
-            fill="#150919"
-          />
-        </g>
-      </g>
-
-      <g transform={RUG_KAART}>
-        <rect
-          width={KAART_L}
-          height={KAART_B}
-          rx="7"
-          fill="url(#deksel)"
-          stroke="#241130"
-          strokeWidth="0.6"
-        />
-        {/* De dunne gouden keylijn, een paar millimeter van de rand */}
-        <rect
-          x="7"
-          y="7"
-          width={KAART_L - 14}
-          height={KAART_B - 14}
-          rx="4"
-          fill="none"
-          stroke="url(#folie)"
-          strokeWidth="0.9"
-        />
-        <Woordmerk x={KAART_L / 2} y={35} grootte={17} regelhoogte={18} />
-        {/* Het merkteken staat onderaan, zoals het ornament op de kaartrug */}
-        <Merkteken x={KAART_L / 2} y={84} schaal={0.68} />
-      </g>
-
-      {/* --- de vraagkaart ------------------------------------------------ */}
-
-      <g filter="url(#kaartschaduw)" opacity="0.34">
-        <g transform={VRAAG_KAART}>
-          <rect
-            x="3"
-            y="7"
-            width={KAART_L}
-            height={KAART_B}
-            rx="7"
-            fill="#150919"
-          />
-        </g>
-      </g>
-
-      <g transform={VRAAG_KAART}>
-        <rect
-          width={KAART_L}
-          height={KAART_B}
-          rx="7"
-          fill="url(#karton)"
-          stroke="#D9CDB2"
-          strokeWidth="0.6"
-        />
-        <g
-          className="font-serif text-[11.5px] sm:text-[10.5px]"
-          fill="#3B1E4A"
+      {/* Belettering op het voorvlak, met dezelfde helling als het vlak. */}
+      <g transform="translate(238 139) skewY(-7.8)">
+        <text
           textAnchor="middle"
+          fill="#F7F2E7"
+          fontFamily="var(--font-merk)"
+          fontWeight="900"
+          fontSize="28"
+          letterSpacing="-0.5"
+          y="-14"
         >
-          <text x={KAART_L / 2} y={45}>
-            Welk liedje zet je op
-          </text>
-          <text x={KAART_L / 2} y={60}>
-            na een rotdienst?
-          </text>
-        </g>
+          IK ZIE, IK ZIE…
+        </text>
+        <text
+          textAnchor="middle"
+          fontFamily="var(--font-merk)"
+          fontWeight="900"
+          fontSize="15"
+          letterSpacing="4.5"
+          y="14"
+        >
+          <tspan fill="#F7F2E7">INTER</tspan>
+          <tspan fill="#C9A8E0">VISIE</tspan>
+        </text>
         <line
-          x1={KAART_L / 2 - 13}
-          y1="76"
-          x2={KAART_L / 2 + 13}
-          y2="76"
-          stroke="#C9A227"
-          strokeWidth="0.8"
-          opacity="0.75"
+          x1="-40"
+          y1="30"
+          x2="40"
+          y2="30"
+          stroke="#C9A8E0"
+          strokeOpacity="0.5"
         />
+        <text
+          textAnchor="middle"
+          fill="#F7F2E7"
+          fillOpacity="0.7"
+          fontFamily="var(--font-sans)"
+          fontWeight="600"
+          fontSize="8.5"
+          letterSpacing="1.2"
+          y="48"
+        >
+          100 VRAGEN · 3 NIVEAUS · 2–10 PROFESSIONALS
+        </text>
       </g>
+
+      {/* Zijkant-tekst, staand */}
+      <text
+        transform="translate(66 208) rotate(-90) skewX(-8)"
+        fill="#F7F2E7"
+        fillOpacity="0.75"
+        fontFamily="var(--font-merk)"
+        fontWeight="900"
+        fontSize="10"
+        letterSpacing="2.6"
+      >
+        KIJK. VRAAG. REFLECTEER.
+      </text>
     </svg>
+  );
+}
+
+/**
+ * De open doos met de drie niveaus zichtbaar. Gebruikt de echte kaarten uit
+ * cards.json, dus wat hier staat staat straks ook op karton.
+ */
+export function DoosOpen({ className = "" }: { className?: string }) {
+  const kaarten = [
+    voorbeelden(1, 1)[0],
+    voorbeelden(2, 1)[0],
+    voorbeelden(3, 1)[0],
+  ];
+
+  return (
+    <div className={`grid grid-cols-3 gap-3 sm:gap-5 ${className}`}>
+      {kaarten.map((kaart) => (
+        <Kaart key={kaart.card_number} kaart={kaart} />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * Een losse stapel: drie achterkanten die achter elkaar wegvallen. Bewust
+ * subtiel geroteerd, zodat het een stapel is en geen keurige grid.
+ *
+ * De twee achterste kaarten liggen absoluut over de voorste heen. De voorste
+ * staat in de normale flow en bepaalt dus de hoogte van de stapel — zet je ze
+ * alle drie absoluut, dan klapt de container dicht.
+ */
+export function KaartStapel({ className = "" }: { className?: string }) {
+  return (
+    <div className={`relative ${className}`}>
+      <KaartAchterkant className="absolute inset-0 translate-x-3 translate-y-2 rotate-6 opacity-45" />
+      <KaartAchterkant className="absolute inset-0 translate-x-1.5 translate-y-1 rotate-3 opacity-70" />
+      <KaartAchterkant className="relative" />
+    </div>
   );
 }

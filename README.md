@@ -1,32 +1,67 @@
-# Ik zie ik zie…
+# IK ZIE, IK ZIE…
 
-Landingspagina en aanvraagformulier voor **Ik zie ik zie…**, het intervisiespel
-voor behandelaren en begeleiders in de jeugdzorg. Een gesprekskaartspel met
-100 vragen en drie niveaus.
+Merk, webshop en productieproces voor **IK ZIE, IK ZIE… INTERVISIE** — een
+intervisiekaartspel met 100 vraagkaarten in drie niveaus, voor professionals in
+jeugdhulp, jeugd-GGZ en GGZ.
 
-Drie routes:
+Domein: **ikzieikzie.eu**
 
-| Route        | Wat het is                                                              |
-| ------------ | ----------------------------------------------------------------------- |
-| `/`          | Landingspagina: waarom het spel bestaat, de drie niveaus, voor wie       |
-| `/aanvragen` | Aanvraagformulier (interesse-registratie, geen betaling)                |
-| `/beheer`    | Overzicht van binnengekomen aanvragen + CSV-export, achter een wachtwoord |
+---
+
+## Wat er in deze repository zit
+
+| Map | Wat |
+| --- | --- |
+| `app/` | De website: homepage, productpagina, checkout, B2B, artikelen, juridisch, beheer |
+| `components/` | Merk, kaart, doos, formuliervelden, UI-bouwstenen |
+| `lib/` | Producten en prijzen, kaarten, schema's, opslag, mail, Stripe |
+| `content/` | De 100 kaarten (csv/json/md), artikelen, e-mails, socialcontent |
+| `design/` | Merkgids, typografie, printspecificaties, dooscopy, handleiding |
+| `docs/` | Onderzoek, leveranciers, prijsmodel, marketing, juridisch, besluitenlogboek |
+| `scripts/` | Generator en controle van de kaarten, en van de printbestanden |
+
+Begin bij **`docs/decision-log.md`** als je wilt weten waarom iets is zoals het
+is, en bij **`docs/launch-checklist.md`** als je wilt weten wat er nog moet
+gebeuren.
+
+---
+
+## Stand van zaken
+
+| | |
+| --- | --- |
+| 100 vraagkaarten | ✔ geschreven en programmatisch gecontroleerd |
+| Website en webshop | ✔ gebouwd, build en QA schoon |
+| Stripe-checkout | ✔ geïmplementeerd, **sleutels ontbreken nog** |
+| Printbestanden | ✔ generator werkt, **nog niet naar drukkersformaat** |
+| Leveranciers | ✔ 10 onderzocht, 3 op shortlist — **geen enkele mail verstuurd** |
+| Prijs | ✔ € 39,95 vastgesteld en onderbouwd |
+| Inkoopprijs | ✘ onbekend, geen offertes binnen |
+| Bedrijfsgegevens | ✘ plaatshouders, nog invullen |
+| Merkregistratie | ✘ niet onderzocht |
+
+De verkoop staat standaard **uit** (`NEXT_PUBLIC_VERKOOP_OPEN`). Zolang er geen
+voorraad is toont de productpagina de wachtlijst in plaats van een afrekenknop.
+
+---
 
 ## Techniek
 
-- **Next.js 16** (App Router) + **TypeScript** + **Tailwind CSS v4**
-- **Zod** voor validatie — hetzelfde schema draait op de server, de HTML-attributen
-  in het formulier zijn alleen een service voor de bezoeker
-- **Server Actions** voor het versturen; geen aparte API-laag
-- Opslag met twee drivers achter één interface (`lib/store/`):
-  - **JSON-bestand** (`data/aanvragen.json`) — standaard, nul configuratie
-  - **Postgres** (`pg`) — zodra `DATABASE_URL` gezet is
-- Geen animatiebibliotheken, geen UI-framework, geen afbeeldingen: de kaartendoos
-  is met de hand in SVG getekend (`components/Kaartendoos.tsx`)
+- **Next.js 16** (App Router, Turbopack) + **TypeScript** + **Tailwind CSS v4**
+- **Zod** voor validatie — hetzelfde schema op client en server
+- **Server Actions** voor formulieren, geen aparte API-laag
+- **Stripe Checkout** voor betalingen, met webhook
+- Opslag via twee drivers achter één interface (`lib/store/`): JSON-bestand
+  lokaal, Postgres in productie
+- Geen animatiebibliotheek, geen UI-framework, geen afbeeldingen — de doos en de
+  kaarten zijn met de hand in SVG getekend
+- Fonts via `next/font`, dus geen extern verzoek bij het laden
+
+---
 
 ## Lokaal draaien
 
-Je hebt Node.js 20.9 of nieuwer nodig.
+Node.js 20.9 of nieuwer.
 
 ```bash
 npm install
@@ -34,169 +69,170 @@ cp .env.example .env.local   # en vul in wat je nodig hebt
 npm run dev
 ```
 
-De site draait op http://localhost:3000.
+De site draait op http://localhost:3000. Zonder één env-variabele werkt alles
+behalve `/beheer`, de checkout en de mail. Inzendingen komen dan in
+`data/inzendingen.json` (die map staat in `.gitignore`).
 
-Zonder ook maar één env-variabele werkt alles behalve `/beheer`: aanvragen komen
-dan in `data/aanvragen.json` te staan (die map staat in `.gitignore`).
-
-### Env-variabelen
-
-| Variabele                  | Verplicht        | Waarvoor                                                          |
-| -------------------------- | ---------------- | ----------------------------------------------------------------- |
-| `BEHEER_WACHTWOORD`        | voor `/beheer`   | Wachtwoord van het beheeroverzicht                                 |
-| `DATABASE_URL`             | in productie     | Postgres-verbinding. Leeg = JSON-bestand                           |
-| `AANVRAGEN_BESTAND`        | nee              | Ander pad voor het JSON-bestand                                    |
-| `NEXT_PUBLIC_SITE_URL`     | aanbevolen       | Volledige URL, voor canonical-links, sitemap en Open Graph-tags    |
-| `NEXT_PUBLIC_CONTACT_MAIL` | nee              | Adres in de footer (standaard `hallo@ikzieikzie.nl`)               |
-| `RESEND_API_KEY`           | nee              | Zet de bevestigingsmail aan                                        |
-| `MAIL_AFZENDER`            | bij mail         | Afzender, bijv. `"Ik zie ik zie... <hallo@jouwdomein.nl>"`          |
-| `MAIL_KOPIE_NAAR`          | nee              | Krijgt een seintje bij elke nieuwe aanvraag                        |
-
-`POSTGRES_URL` werkt ook — handig als je de Vercel Postgres-integratie gebruikt,
-die zet die variabele zelf.
-
-`NEXT_PUBLIC_SITE_URL` wordt tijdens de **build** vastgelegd: `robots.txt` en
-`sitemap.xml` zijn statische bestanden. Zet 'm dus bij je host en niet pas op de
-draaiende server, anders staat er `localhost` in. Vergeet je 'm op Vercel, dan
-valt de app terug op het productiedomein van het project.
-
-## De database opzetten
-
-### Lokaal: niets doen
-
-Laat `DATABASE_URL` leeg. Bij de eerste aanvraag maakt de app
-`data/aanvragen.json` aan. Schrijven gebeurt via een wachtrij en een atomaire
-rename, dus twee gelijktijdige aanvragen overschrijven elkaar niet.
-
-Alles wissen? `rm data/aanvragen.json`.
-
-### Productie: Postgres
-
-Een serverless host heeft geen blijvend bestandssysteem — wat je naar schijf
-schrijft is bij de volgende deploy weg. Zet daarom `DATABASE_URL`. Elke
-Postgres werkt: Vercel Postgres, Neon, Supabase, of je eigen server.
+### Scripts
 
 ```bash
-DATABASE_URL="postgres://gebruiker:wachtwoord@host/database?sslmode=require"
+npm run dev              # ontwikkelserver
+npm run build            # productiebuild
+npm run start            # productiebuild draaien
+npm run lint             # ESLint
+npm run typecheck        # tsc --noEmit
+npm run kaarten          # genereert content/cards.{json,csv} en 100-vragen.md
+npm run kaarten:check    # controleert de kaartenset zonder te schrijven
+npm run printbestanden   # genereert print/ (SVG op ware grootte)
+npm run check            # kaarten + lint + typecheck + build
 ```
 
-De tabel wordt bij het eerste gebruik automatisch aangemaakt:
+---
+
+## De 100 kaarten
+
+De vragen staan in **`scripts/kaarten.mjs`** — dat is de bron. Daaruit worden
+gegenereerd:
+
+- `content/cards.json` — leest de website in via `lib/kaarten.ts`
+- `content/cards.csv` — puntkomma's en BOM, opent goed in een Nederlandse Excel
+- `content/100-vragen.md` — leesbare versie
+
+Wijzig de vragen in het script en draai `npm run kaarten`. Nooit de gegenereerde
+bestanden met de hand aanpassen.
+
+Bij elke run wordt gecontroleerd:
+
+- exact 100 kaarten, verdeeld 33 / 34 / 33 over de drie niveaus;
+- nummering 1–100 aaneengesloten, niveaus in drie aaneengesloten blokken;
+- geen doublures (exact én bijna — er is een woordoverlap-check);
+- elke vraag eindigt op precies één vraagteken;
+- maximaal 105 tekens, zodat de vraag binnen de safe zone past;
+- geen aanhalingstekens, geen woorden die om een diagnose vragen;
+- de juiste niveaukleur per kaart.
+
+De set klopt niet? Dan draaien de printbestanden niet. Liever een rode build dan
+honderd verkeerde kaarten bij de drukker.
+
+---
+
+## Env-variabelen
+
+Zie `.env.example` voor de volledige lijst met uitleg. De belangrijkste:
+
+| Variabele | Verplicht | Waarvoor |
+| --- | --- | --- |
+| `NEXT_PUBLIC_SITE_URL` | aanbevolen | Canonical, sitemap, Open Graph. **Wordt tijdens de build vastgelegd** — zet 'm bij je host |
+| `DATABASE_URL` | in productie | Postgres. Leeg = JSON-bestand, en dat is op een serverless host bij elke deploy weg |
+| `BEHEER_WACHTWOORD` | voor `/beheer` | Wachtwoord van het overzicht |
+| `STRIPE_SECRET_KEY` | voor de checkout | Zonder deze sleutel geeft de checkout een nette 503 |
+| `STRIPE_WEBHOOK_SECRET` | voor de checkout | **Zonder dit wordt een betaalde bestelling niet vastgelegd** |
+| `NEXT_PUBLIC_VERKOOP_OPEN` | bij livegang | Zet op `1` zodra er voorraad is |
+| `NEXT_PUBLIC_BEDRIJFSNAAM` e.a. | vóór livegang | Anders staan er zichtbare plaatshouders op de juridische pagina's |
+| `RESEND_API_KEY` | nee | Zet de transactiemails aan |
+| `NEXT_PUBLIC_GA_ID` | nee | Zonder deze key verschijnt er geen cookiebalk en laadt er niets |
+
+`POSTGRES_URL` werkt ook, handig bij de Vercel Postgres-integratie.
+
+---
+
+## Database
+
+Lokaal hoef je niets te doen: bij de eerste inzending wordt
+`data/inzendingen.json` aangemaakt. Schrijven gaat via een wachtrij en een
+atomaire rename, dus twee gelijktijdige inzendingen overschrijven elkaar niet.
+
+In productie zet je `DATABASE_URL`. De tabel wordt bij het eerste gebruik zelf
+aangemaakt:
 
 ```sql
-CREATE TABLE IF NOT EXISTS aanvragen (
+CREATE TABLE IF NOT EXISTS inzendingen (
   id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  naam          text NOT NULL,
-  email         text NOT NULL,
-  organisatie   text,
-  functie       text,
-  aantal        integer NOT NULL DEFAULT 1,
-  doelen        text[] NOT NULL DEFAULT '{}',
-  opmerking     text,
+  soort         text NOT NULL,
+  gegevens      jsonb NOT NULL DEFAULT '{}'::jsonb,
   aangemaakt_op timestamptz NOT NULL DEFAULT now()
 );
 ```
 
-Je hoeft dus geen migratie te draaien. Draait je database in Docker op
-`localhost`, dan slaat de app TLS automatisch over.
+Eén tabel voor vier soorten inzending — wachtlijst, offerte, contact en
+bestelling. De vorm van `gegevens` wordt bewaakt door zod vóórdat er iets de
+opslag in gaat. Een nieuw formulier toevoegen is dus een schema, geen migratie.
+Waarom dat zo is: `docs/decision-log.md`.
 
-Heb je al aanvragen in `data/aanvragen.json` staan en wil je die meenemen?
-Download eerst de CSV via `/beheer` — dat is de makkelijkste weg naar `COPY`.
+---
 
-## Deployen naar Vercel
+## Stripe
 
-1. Push deze repo naar GitHub.
-2. Ga naar [vercel.com/new](https://vercel.com/new), importeer de repo. Vercel
-   herkent Next.js zelf; er is niets in te stellen aan build-commando's.
-3. Voeg een Postgres toe — **Storage → Create Database → Postgres** — of plak de
-   `DATABASE_URL` van Neon of Supabase erin.
-4. Zet onder **Settings → Environment Variables** minimaal:
-   - `BEHEER_WACHTWOORD` — verzin iets langs
-   - `DATABASE_URL` (of laat de Vercel-integratie `POSTGRES_URL` zetten)
-   - `NEXT_PUBLIC_SITE_URL` — bijv. `https://ikzieikzie.nl`
-   - `NEXT_PUBLIC_CONTACT_MAIL` — het adres dat in de footer moet staan
-5. Deploy. Klaar.
+De volledige integratie staat er. Wat jij moet doen:
+
+1. Account aanmaken op stripe.com en de verificatie afronden.
+2. Onder **Settings → Payment methods** aanzetten wat je wilt: iDEAL, kaart,
+   Apple Pay, Google Pay. De code noemt betaalmethoden bewust **niet**, zodat je
+   ze kunt wisselen zonder deploy.
+3. `STRIPE_SECRET_KEY` zetten.
+4. Een webhook aanmaken op `https://www.ikzieikzie.eu/api/stripe/webhook` met
+   alleen de gebeurtenis `checkout.session.completed`, en het signing secret in
+   `STRIPE_WEBHOOK_SECRET` zetten.
+5. Optioneel een btw-tarief van 21% met gedrag "inclusive" aanmaken en het id in
+   `STRIPE_BTW_TARIEF_ID` zetten.
+6. `NEXT_PUBLIC_VERKOOP_OPEN=1` zetten.
+
+Twee dingen die opzettelijk zo zijn gebouwd:
+
+- **De prijs wordt op de server berekend.** De client stuurt alleen een slug en
+  een aantal; alles wat de browser meestuurt kun je aanpassen.
+- **De webhook is de enige bron van waarheid over betaling.** De pagina
+  `/bestellen/gelukt` bevestigt niets administratief — die kan iedereen openen.
+
+**Let op:** sinds 19 juni 2026 moet een webshop een duidelijk zichtbare
+herroepingsfunctie aanbieden. Die is er nog niet. Zie
+`docs/juridisch-onderzoek.md` §1 — dit moet vóór de webshop opengaat.
+
+---
+
+## Deployen
+
+1. Push naar GitHub en importeer de repo bij je host (Vercel herkent Next.js
+   zelf; er valt niets in te stellen aan build-commando's).
+2. Voeg een Postgres toe of plak een `DATABASE_URL` van Neon of Supabase.
+3. Zet minimaal `BEHEER_WACHTWOORD`, `DATABASE_URL`, `NEXT_PUBLIC_SITE_URL` en
+   `NEXT_PUBLIC_CONTACT_MAIL`.
+4. Deploy.
 
 Vergeet `DATABASE_URL` niet: zonder die variabele start de site wel, maar
-verdwijnen aanvragen bij elke deploy. De server logt daar een waarschuwing over.
+verdwijnen inzendingen bij elke deploy. De server logt daar een waarschuwing
+over.
 
-## De bevestigingsmail (optioneel)
+---
 
-Standaard wordt er **geen** mail verstuurd — de aanvraag wordt alleen opgeslagen
-en je ziet 'm op `/beheer`. Wil je wel bevestigen, dan zit er een implementatie
-klaar voor [Resend](https://resend.com):
+## Wat er níet op de site staat
 
-1. Maak een account, verifieer je domein en maak een API-key aan.
-2. Zet `RESEND_API_KEY` en `MAIL_AFZENDER` (dat adres moet op het geverifieerde
-   domein zitten). Optioneel `MAIL_KOPIE_NAAR` voor een seintje aan jezelf.
-3. Klaar — de volgende aanvraag krijgt een bevestiging.
+Dit is een expliciete keuze en geen omissie:
 
-Andere provider (Postmark, SendGrid, eigen SMTP)? Vervang alleen de functie
-`verstuur()` in `lib/mail.ts`; de rest kan blijven staan.
+- Geen reviews, sterren of klantaantallen — er zijn er nog geen
+- Geen SKJ-accreditatie, keurmerk of erkende-methodiekclaim — die zijn er niet
+- Geen "bewezen effectief" — er is geen effectonderzoek
+- Geen schaarste, timers of nepkortingen
+- Geen KvK- of btw-nummer tot het echte nummer bekend is
+- Geen tracking vóór expliciete toestemming
+- Geen getallen over SKJ-eisen — die veranderen, en dan staat de pagina fout
 
-Mislukt het versturen, dan wordt dat gelogd maar loopt de aanvraag niet stuk.
-Een opgeslagen aanvraag mag nooit sneuvelen op een mailserver.
+---
 
-## Het beheeroverzicht
+## Beperkingen van deze bouwronde
 
-`/beheer` vraagt om `BEHEER_WACHTWOORD`. Bij een juiste invoer krijg je een
-`httpOnly`-cookie die 8 uur geldig is: een vervaltijd plus een HMAC daarover,
-ondertekend met het wachtwoord zelf. Het wachtwoord staat dus niet in de cookie
-en een geknutselde cookie komt er niet doorheen. Wachtwoorden vergelijken we met
-`timingSafeEqual`.
+De omgeving waarin dit project is gebouwd had **beperkte netwerktoegang**:
+zoeken werkte, maar het rechtstreeks ophalen van webpagina's was geblokkeerd.
+Gevolgen, allemaal ook vermeld in het betreffende document:
 
-Zonder `BEHEER_WACHTWOORD` blijft de pagina dicht en krijg je een uitleg te zien.
-
-De **Download CSV**-knop levert een puntkomma-gescheiden bestand met BOM, zodat
-het in een Nederlandse Excel meteen goed opent. Cellen die met `=`, `+`, `-` of
-`@` beginnen krijgen een apostrof, zodat Excel ze niet als formule uitvoert.
-
-## Scripts
-
-```bash
-npm run dev     # ontwikkelserver
-npm run build   # productiebuild
-npm run start   # productiebuild draaien
-npm run lint    # ESLint
-```
-
-## Structuur
-
-```
-app/
-  page.tsx                    landingspagina
-  layout.tsx                  fonts, SEO-metadata
-  globals.css                 kleuren, kraft-textuur, typografie
-  opengraph-image.tsx         social-preview (gegenereerd, geen bestand)
-  aanvragen/
-    page.tsx                  aanvraagpagina
-    AanvraagFormulier.tsx     formulier (client)
-    actions.ts                server action: valideren, opslaan, mailen
-  beheer/
-    page.tsx                  login of overzicht
-    LoginFormulier.tsx
-    actions.ts                in- en uitloggen
-    export/route.ts           CSV-download
-components/
-  Kaartendoos.tsx             voor- en achterkant van de doos in SVG
-  Merk.tsx                    woordmerk + ondertekst, header, footer
-lib/
-  schema.ts                   zod-schema, gedeeld door client en server
-  store/                      json- en postgres-driver achter één interface
-  csv.ts                      CSV-export
-  mail.ts                     optionele bevestigingsmail
-  beheer-auth.ts              wachtwoord en sessiecookie
-```
-
-## Kleuren
-
-| Naam        | Hex       | Waar                                    |
-| ----------- | --------- | --------------------------------------- |
-| Diep paars  | `#3B1E4A` | tekst, titels, niveau 3                 |
-| Medium paars| `#8B5FBF` | links, knoppen, niveau 2                |
-| Licht lila  | `#C9A8E0` | niveau 1, zachte vlakken                |
-| Goud        | `#C9A227` | lijnen, cijfers, accenten — spaarzaam   |
-| Crème       | `#F5F0E4` | achtergrond                             |
-| Kraft       | `#EFE3CC` | secties, kaders                         |
-
-Koppen staan in Fraunces, bodytekst in Nunito Sans; beide via `next/font`, dus ze
-worden mee gebundeld en er gaat geen verzoek naar Google bij het laden.
+- **Geen leverancierswebsite bekeken** en dus geen enkele prijs geverifieerd —
+  `docs/vendor-shortlist.md`, `docs/pricing-model.md`
+- **Geen mail verstuurd.** De conceptmails staan verzendklaar in
+  `docs/vendor-emails.md`; het juiste contactadres moet je zelf van hun site halen
+- **Geen merkenregisteronderzoek** bij BOIP of EUIPO — `docs/pricing-model.md` §5
+- **Geen domeincontrole** op ikzieikzie.eu
+- **Mont Heavy niet opgehaald en de licentie niet gecontroleerd** — er draait nu
+  Figtree Black; `design/typografie.md`
+- **Geen primaire bronnen** van SKJ, wetten.overheid.nl of het Kwaliteitskader
+  geraadpleegd; er staat daarom geen enkel getal over registratie-eisen op de
+  site — `docs/research-intervisie.md`
