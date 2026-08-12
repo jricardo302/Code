@@ -26,6 +26,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   uniqueIndex,
@@ -261,8 +262,11 @@ export const guests = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
-    uniqueIndex("guests_email_key").on(sql`lower(${t.email})`),
+    // A plain column index so ON CONFLICT can target it; the CHECK below
+    // keeps the column lowercase, so it is still case-insensitively unique.
+    uniqueIndex("guests_email_key").on(t.email),
     check("guests_email_shape", sql`position('@' in ${t.email}) > 1`),
+    check("guests_email_lowercase", sql`${t.email} = lower(${t.email})`),
   ],
 );
 
@@ -463,6 +467,29 @@ export const auditLog = pgTable(
   (t) => [
     index("audit_log_entity_idx").on(t.entity, t.entityId),
     index("audit_log_created_at_idx").on(t.createdAt),
+  ],
+);
+
+// ---------------------------------------------------------------------------
+// rate_limits
+// ---------------------------------------------------------------------------
+
+/**
+ * Fixed-window rate limiting in Postgres, so it holds across serverless
+ * instances without adding Redis to the stack. One row per (key, window);
+ * `count` is bumped with an atomic upsert. A cron sweeps expired windows.
+ */
+export const rateLimits = pgTable(
+  "rate_limits",
+  {
+    /** e.g. `quote:203.0.113.7` */
+    key: text("key").notNull(),
+    windowStart: timestamp("window_start", { withTimezone: true }).notNull(),
+    count: integer("count").notNull().default(1),
+  },
+  (t) => [
+    primaryKey({ columns: [t.key, t.windowStart] }),
+    index("rate_limits_window_idx").on(t.windowStart),
   ],
 );
 
