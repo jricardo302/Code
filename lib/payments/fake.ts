@@ -20,13 +20,24 @@ import type {
 
 export const FAKE_WEBHOOK_SECRET = "fake-provider-secret";
 
-/** In-memory store; module-scoped, which is exactly right for dev/E2E. */
-const store = new Map<
-  string,
-  { request: CreatePaymentRequest; status: PaymentSnapshot["status"]; refundedCents: number }
->();
+/**
+ * In-memory store on globalThis: each route entry gets its own bundled copy
+ * of this module in a production build, so a module-scoped Map would leave
+ * the checkout page blind to payments the booking route created. One Node
+ * process — dev/E2E — is exactly the supported scope.
+ */
+interface FakeEntry {
+  request: CreatePaymentRequest;
+  status: PaymentSnapshot["status"];
+  refundedCents: number;
+}
 
-let counter = 0;
+const globalStore = globalThis as unknown as {
+  __fakePayments?: Map<string, FakeEntry>;
+  __fakePaymentCounter?: number;
+};
+
+const store = (globalStore.__fakePayments ??= new Map<string, FakeEntry>());
 
 export function fakeSignature(body: string): string {
   return createHmac("sha256", FAKE_WEBHOOK_SECRET).update(body, "utf8").digest("hex");
@@ -52,7 +63,7 @@ export class FakeProvider implements PaymentProvider {
   }
 
   async createPayment(request: CreatePaymentRequest): Promise<CreatedPayment> {
-    const id = `fake_${++counter}_${request.paymentId.slice(0, 8)}`;
+    const id = `fake_${(globalStore.__fakePaymentCounter = (globalStore.__fakePaymentCounter ?? 0) + 1)}_${request.paymentId.slice(0, 8)}`;
     store.set(id, { request, status: "open", refundedCents: 0 });
     return {
       providerPaymentId: id,

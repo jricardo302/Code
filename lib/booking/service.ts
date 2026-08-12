@@ -14,7 +14,7 @@
  * statement's transaction, and bookings-vs-bookings is the constraint's job.
  */
 
-import { and, eq, gt, gte, inArray, lt, lte, ne, or, sql } from "drizzle-orm";
+import { and, eq, gt, inArray, lt, lte } from "drizzle-orm";
 import type { Db } from "../db/client";
 import {
   blockedDates,
@@ -26,7 +26,6 @@ import {
   type Property,
 } from "../db/schema";
 import {
-  addDays,
   nightsBetween,
   todayInTimezone,
   type CalendarDate,

@@ -6,7 +6,7 @@
  * expectedTotalCents guard makes any drift explicit instead of silent.
  */
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { addDays, type CalendarDate } from "@/lib/domain/dates";
 import { formatCents } from "@/lib/domain/money";
@@ -87,36 +87,45 @@ export function BookingWizard({ providers, holdMinutes }: Props) {
     };
   }, []);
 
-  // Live quote whenever the range completes.
-  useEffect(() => {
-    if (!arrival || !departure) {
-      setQuoteState({ kind: "idle" });
-      return;
-    }
-    let cancelled = false;
-    setQuoteState({ kind: "loading" });
-    (async () => {
-      const response = await fetch("/api/quote", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ arrivalDate: arrival, departureDate: departure, guests }),
-      });
-      if (cancelled) return;
-      if (response.ok) {
-        const quote: QuoteData = await response.json();
-        setQuoteState({ kind: "ready", quote });
-        if (!quote.depositAllowed) setPaymentPlan("full");
-      } else {
-        const body = await response.json().catch(() => null);
-        const code = body?.error?.code ?? "GENERIC";
-        const match = /minimum of (\d+)/.exec(body?.error?.message ?? "");
-        setQuoteState({ kind: "error", code, minNights: match ? Number(match[1]) : undefined });
+  // Live quote, requested from the selection handlers (not an effect, which
+  // would set state synchronously and cascade renders). A monotonically
+  // increasing id discards answers that arrive out of order.
+  const quoteRequestId = useRef(0);
+  const requestQuote = useCallback(
+    (a: CalendarDate | null, d: CalendarDate | null, guestCount: number) => {
+      const requestId = ++quoteRequestId.current;
+      if (!a || !d) {
+        setQuoteState({ kind: "idle" });
+        return;
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [arrival, departure, guests]);
+      setQuoteState({ kind: "loading" });
+      (async () => {
+        try {
+          const response = await fetch("/api/quote", {
+            method: "POST",
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify({ arrivalDate: a, departureDate: d, guests: guestCount }),
+          });
+          if (requestId !== quoteRequestId.current) return;
+          if (response.ok) {
+            const quote: QuoteData = await response.json();
+            setQuoteState({ kind: "ready", quote });
+            if (!quote.depositAllowed) setPaymentPlan("full");
+          } else {
+            const body = await response.json().catch(() => null);
+            const code = body?.error?.code ?? "GENERIC";
+            const match = /minimum of (\d+)/.exec(body?.error?.message ?? "");
+            setQuoteState({ kind: "error", code, minNights: match ? Number(match[1]) : undefined });
+          }
+        } catch {
+          if (requestId === quoteRequestId.current) {
+            setQuoteState({ kind: "error", code: "GENERIC" });
+          }
+        }
+      })();
+    },
+    [],
+  );
 
   const detailsComplete =
     guest.firstName.trim() && guest.lastName.trim() && /.+@.+\..+/.test(guest.email);
@@ -186,6 +195,7 @@ export function BookingWizard({ providers, holdMinutes }: Props) {
               onSelect={(a, d) => {
                 setArrival(a);
                 setDeparture(d);
+                requestQuote(a, d, guests);
               }}
             />
           ) : (
@@ -218,7 +228,11 @@ export function BookingWizard({ providers, holdMinutes }: Props) {
             <span className="text-sm font-medium text-navy">{t("guestsLabel")}</span>
             <select
               value={guests}
-              onChange={(e) => setGuests(Number(e.target.value))}
+              onChange={(e) => {
+                const next = Number(e.target.value);
+                setGuests(next);
+                requestQuote(arrival, departure, next);
+              }}
               className="mt-1 w-full rounded-md border border-navy/20 bg-white px-3 py-2"
             >
               {Array.from({ length: availability?.maxGuests ?? 6 }, (_, i) => i + 1).map((n) => (

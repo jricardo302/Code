@@ -40,6 +40,8 @@ export async function GET(request: Request): Promise<NextResponse> {
       bookableUntil: addDays(ctx.today, ctx.property.maxAdvanceDays),
       unavailable: ranges,
     },
-    { headers: { "cache-control": "private, max-age=60" } },
+    // Never cached: a guest re-opening the calendar right after someone else
+    // booked must see the taken nights immediately.
+    { headers: { "cache-control": "no-store" } },
   );
 }

@@ -5,7 +5,7 @@
  */
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { blockedDates, icalFeeds, properties } from "@/lib/db/schema";
 import { syncFeed } from "@/lib/ical/import";
 import {

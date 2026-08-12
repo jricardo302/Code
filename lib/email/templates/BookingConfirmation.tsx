@@ -1,7 +1,7 @@
 import { Button, Hr, Section, Text } from "@react-email/components";
 import * as React from "react";
 import { formatCents } from "../../domain/money";
-import type { Quote, QuoteLine } from "../../domain/pricing";
+import type { QuoteLine } from "../../domain/pricing";
 import { emailCopy, resolveEmailLocale, type EmailLocale } from "../copy";
 import { BrandEmail, DetailRow, brand, styles } from "./BrandEmail";
 
