@@ -1,0 +1,190 @@
+{
+  "common": {
+    "siteName": "Lighthouse Curaçao",
+    "tagline": "Een gerestaureerde jaren-vijftig bungalow met privézwembad in Katoentuin, Willemstad",
+    "bookNow": "Boek direct",
+    "checkAvailability": "Bekijk beschikbaarheid",
+    "perNight": "per nacht",
+    "nights": "{count, plural, one {# nacht} other {# nachten}}",
+    "guests": "{count, plural, one {# gast} other {# gasten}}",
+    "loading": "Even geduld…",
+    "skipToContent": "Direct naar inhoud"
+  },
+  "nav": {
+    "home": "Home",
+    "house": "Het huis",
+    "gallery": "Galerij",
+    "island": "Het eiland",
+    "rates": "Tarieven",
+    "book": "Boeken",
+    "practical": "Praktisch",
+    "contact": "Contact",
+    "languageLabel": "Taal"
+  },
+  "footer": {
+    "address": "Kaya Platio 18, Katoentuin, Willemstad, Curaçao",
+    "directBooking": "Direct boeken — zonder platformkosten",
+    "rights": "Alle rechten voorbehouden"
+  },
+  "home": {
+    "heroTitle": "Jouw eigen plek onder de passaatwind",
+    "heroSubtitle": "Een gerestaureerde marine-bungalow uit de jaren vijftig: drie slaapkamers, een ommuurde tuin en een privézwembad, tien minuten van Willemstad.",
+    "usp1Title": "Direct bij de eigenaar",
+    "usp1Text": "Geen platform ertussen: je boekt rechtstreeks, met een eerlijke prijs en persoonlijk contact.",
+    "usp2Title": "Zes slaapplaatsen",
+    "usp2Text": "Drie slaapkamers met airco, twee badkamers, en een overdekte porch voor lange avonden.",
+    "usp3Title": "Privézwembad en tuin",
+    "usp3Text": "Een ommuurde tropentuin met bougainville, palmen en een zwembad dat elke week wordt onderhouden.",
+    "houseTeaser": "Het huis",
+    "houseTeaserText": "Gebouwd voor marineofficieren, met de dikke muren en hoge plafonds van toen — en het comfort van nu.",
+    "islandTeaser": "Het eiland",
+    "islandTeaserText": "Van de baaien van Westpunt tot de pontjesbrug: Curaçao is klein genoeg voor dagtochten en groot genoeg om te blijven verrassen.",
+    "readMore": "Lees verder"
+  },
+  "house": {
+    "title": "Het huis",
+    "intro": "Kaya Platio 18 is een vrijstaande bungalow uit de jaren vijftig, gebouwd als woning voor Nederlandse marineofficieren en in 2024 volledig gerestaureerd. De oorspronkelijke structuur — dikke muren, hoge plafonds, doorwaaiende kamers — is intact gelaten; keuken, badkamers en techniek zijn nieuw.",
+    "bedroomsTitle": "Slapen",
+    "bedroomsText": "Drie slaapkamers, elk met airconditioning en horren: een hoofdslaapkamer met kingsize bed en en-suite badkamer, een tweede kamer met tweepersoonsbed en een derde met twee eenpersoonsbedden. Samen goed voor zes gasten.",
+    "livingTitle": "Wonen en koken",
+    "livingText": "De woonkamer opent met dubbele deuren naar de overdekte porch. De keuken heeft een gasfornuis, vaatwasser, oven en een grote koelkast — boodschappen doe je bij de Centrum Supermarkt op vijf minuten rijden.",
+    "outsideTitle": "Buiten",
+    "outsideText": "De ommuurde tuin vangt de passaatwind en houdt de wereld buiten. Het zwembad van vier bij acht meter wordt wekelijks onderhouden; ligbedden, buitendouche en een schaduwrijke eettafel voor zes staan klaar.",
+    "factsTitle": "In het kort",
+    "facts": {
+      "bedrooms": "3 slaapkamers · 6 slaapplaatsen",
+      "bathrooms": "2 badkamers",
+      "pool": "Privézwembad 4 × 8 m",
+      "aircon": "Airco in elke slaapkamer",
+      "wifi": "Snelle wifi door het hele huis",
+      "parking": "Parkeren op eigen terrein achter de poort"
+    }
+  },
+  "gallery": {
+    "title": "Galerij",
+    "intro": "Het huis, de tuin en het licht van Curaçao — zoals je het aantreft.",
+    "categories": {
+      "all": "Alles",
+      "house": "Het huis",
+      "garden": "Tuin en zwembad",
+      "island": "Het eiland"
+    }
+  },
+  "island": {
+    "title": "Het eiland",
+    "intro": "Curaçao is 60 kilometer lang en overal binnen een uur. Vanaf het huis rijd je in tien minuten naar de binnenstad van Willemstad, in veertig naar de stranden van Westpunt.",
+    "beachesTitle": "Stranden",
+    "beachesText": "Cas Abao en Porto Mari voor een dag met ligbed en strandtent; Grote Knip voor het uitzicht dat op de ansichtkaarten staat; Playa Lagun als je met schildpadden wilt snorkelen. Ga vroeg — voor tien uur heb je het zand voor jezelf.",
+    "cityTitle": "Willemstad",
+    "cityText": "De pastelgevels van Handelskade, de pontjesbrug die openzwaait voor schepen, de markt waar Venezolaanse boten fruit verkopen. Parkeer bij het Rif Fort en loop; de stad is klein en op zijn mooist te voet.",
+    "foodTitle": "Eten en drinken",
+    "foodText": "Van stoba en fresh catch bij Plasa Bieu tot fine dining in Pietermaai. Reserveer in het weekend; op dinsdag is de haven van Sint Michiel het adres voor gegrilde vis.",
+    "divingTitle": "Onder water",
+    "divingText": "De rifkust aan leeward-zijde is een van de gezondste van de Cariben. Duikscholen op vijf minuten van het huis verzorgen brevetten en begeleide duiken; snorkelen kan zo vanaf het strand."
+  },
+  "rates": {
+    "title": "Tarieven en beschikbaarheid",
+    "intro": "Prijzen per nacht voor het hele huis, tot zes gasten. Boek je direct, dan betaal je geen platformkosten.",
+    "seasonHigh": "Hoogseizoen",
+    "seasonShoulder": "Tussenseizoen",
+    "seasonLow": "Laagseizoen",
+    "highDates": "15 december – 15 april",
+    "shoulderDates": "16 april – 30 juni en 1 september – 14 december",
+    "lowDates": "1 juli – 31 augustus",
+    "minStay": "minimaal {nights} nachten",
+    "cleaningFee": "Eindschoonmaak: {amount} per verblijf",
+    "tax": "Logeerbelasting: {pct}% (verplichte afdracht Curaçao)",
+    "deposit": "Aanbetaling 30% — restbedrag uiterlijk 35 dagen voor aankomst",
+    "calendarTitle": "Beschikbaarheid",
+    "calendarHint": "Groen is vrij; doorgestreept is bezet. Kies je data op de boekingspagina."
+  },
+  "book": {
+    "title": "Boeken",
+    "intro": "Kies je data, bekijk de prijs en rond af met iDEAL of creditcard. Je boeking is definitief zodra de (aan)betaling binnen is.",
+    "arrival": "Aankomst",
+    "departure": "Vertrek",
+    "guestsLabel": "Gasten",
+    "searchButton": "Bereken prijs",
+    "quoteTitle": "Jouw verblijf",
+    "unavailable": "Deze data zijn helaas bezet. Kies andere data.",
+    "minNightsError": "Voor deze periode geldt een minimum van {nights} nachten.",
+    "noRate": "Voor een deel van deze periode is nog geen tarief ingesteld. Neem contact op.",
+    "cleaningFee": "Eindschoonmaak",
+    "tax": "Logeerbelasting ({pct}%)",
+    "total": "Totaal",
+    "payDeposit": "30% aanbetaling: {amount}",
+    "payDepositRest": "Restbedrag {amount} vóór {date}",
+    "payFull": "In één keer betalen: {amount}",
+    "continueButton": "Verder met je gegevens",
+    "detailsTitle": "Je gegevens",
+    "firstName": "Voornaam",
+    "lastName": "Achternaam",
+    "email": "E-mailadres",
+    "phone": "Telefoon (voor de sleuteloverdracht)",
+    "message": "Bericht (optioneel)",
+    "planTitle": "Betaling",
+    "planDeposit": "30% aanbetaling nu, de rest later",
+    "planFull": "Alles in één keer",
+    "providerTitle": "Betaalmethode",
+    "providerMollie": "iDEAL / kaart (Mollie)",
+    "providerStripe": "Internationale kaart (Stripe)",
+    "providerFake": "Testbetaling",
+    "toPayment": "Naar de betaling",
+    "legalNote": "Je gaat naar de beveiligde betaalomgeving. De prijs wordt op de server opnieuw berekend; je betaalt nooit een ander bedrag dan hier getoond.",
+    "holdNote": "We houden je data {minutes} minuten vast terwijl je betaalt.",
+    "errors": {
+      "DATES_UNAVAILABLE": "Deze data zijn zojuist geboekt door iemand anders. Kies andere data.",
+      "QUOTE_MISMATCH": "De prijs is intussen gewijzigd. Controleer het nieuwe totaal en probeer opnieuw.",
+      "RATE_LIMITED": "Te veel pogingen. Wacht even en probeer opnieuw.",
+      "GENERIC": "Er ging iets mis. Probeer het opnieuw of neem contact op."
+    },
+    "status": {
+      "checking": "We controleren je betaling…",
+      "confirmedTitle": "Bevestigd — tot op Curaçao!",
+      "confirmedText": "Je ontvangt binnen enkele minuten een bevestiging per e-mail met een agenda-bestand. Boekingsnummer: {reference}.",
+      "pendingTitle": "Betaling nog niet afgerond",
+      "pendingText": "Je betaling is nog niet verwerkt. Zodra die binnen is, ontvang je automatisch een bevestiging.",
+      "retryButton": "Opnieuw proberen te betalen",
+      "failedTitle": "Betaling niet gelukt",
+      "failedText": "Er is niets afgeschreven. Je kunt het opnieuw proberen zolang we je data vasthouden.",
+      "expiredTitle": "Reservering verlopen",
+      "expiredText": "De betaaltermijn is verstreken en je data zijn weer vrijgegeven. Begin gerust opnieuw."
+    },
+    "calendar": {
+      "label": "Kalender, {month} {year}",
+      "prevMonth": "Vorige maand",
+      "nextMonth": "Volgende maand",
+      "unavailableDay": "bezet",
+      "selectedArrival": "gekozen als aankomst",
+      "selectedDeparture": "gekozen als vertrek",
+      "weekdays": ["ma", "di", "wo", "do", "vr", "za", "zo"]
+    }
+  },
+  "practical": {
+    "title": "Praktisch",
+    "intro": "Alles voor een soepel verblijf, van aankomst tot vertrek.",
+    "checkinTitle": "In- en uitchecken",
+    "checkinText": "Inchecken vanaf 15:00, uitchecken uiterlijk 11:00. Onze beheerder verwelkomt je persoonlijk en is tijdens je verblijf bereikbaar via WhatsApp.",
+    "travelTitle": "Reizen",
+    "travelText": "Vlieg op Hato (CUR); vanaf de luchthaven is het een kwartier rijden. Een huurauto is op Curaçao vrijwel onmisbaar — wij reserveren er desgewenst één voor je bij een lokaal bedrijf.",
+    "healthTitle": "Goed om te weten",
+    "healthText": "Kraanwater is uitstekend drinkbaar (gedestilleerd zeewater). Het stopcontact is 127V met Amerikaanse stekkers; adapters liggen in de la onder de tv. Muggengaas zit op alle ramen.",
+    "houseRulesTitle": "Huisregels",
+    "houseRulesText": "Niet roken in huis; feesten alleen in overleg; het zwembad heeft geen toezicht — let op elkaar, zeker met kinderen.",
+    "cancellationTitle": "Annuleren",
+    "cancellationText": "Kosteloos annuleren tot 60 dagen voor aankomst. Tussen 60 en 35 dagen: de aanbetaling blijft verschuldigd. Binnen 35 dagen: het volledige bedrag. We raden een reisverzekering aan."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Vragen over het huis of je boeking? Mail ons — we antwoorden meestal binnen een dag.",
+    "emailLabel": "E-mail",
+    "responseTime": "Reactie meestal binnen 24 uur",
+    "addressTitle": "Adres",
+    "bookingRefHint": "Vermeld je boekingsnummer (LH-….) als je al geboekt hebt."
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "text": "Deze pagina bestaat niet (meer). De zee is de andere kant op.",
+    "backHome": "Terug naar home"
+  }
+}

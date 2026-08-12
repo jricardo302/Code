@@ -1,0 +1,190 @@
+{
+  "common": {
+    "siteName": "Lighthouse Curaçao",
+    "tagline": "A restored 1950s bungalow with a private pool in Katoentuin, Willemstad",
+    "bookNow": "Book direct",
+    "checkAvailability": "Check availability",
+    "perNight": "per night",
+    "nights": "{count, plural, one {# night} other {# nights}}",
+    "guests": "{count, plural, one {# guest} other {# guests}}",
+    "loading": "One moment…",
+    "skipToContent": "Skip to content"
+  },
+  "nav": {
+    "home": "Home",
+    "house": "The house",
+    "gallery": "Gallery",
+    "island": "The island",
+    "rates": "Rates",
+    "book": "Book",
+    "practical": "Practical",
+    "contact": "Contact",
+    "languageLabel": "Language"
+  },
+  "footer": {
+    "address": "Kaya Platio 18, Katoentuin, Willemstad, Curaçao",
+    "directBooking": "Book direct — no platform fees",
+    "rights": "All rights reserved"
+  },
+  "home": {
+    "heroTitle": "Your own place under the trade winds",
+    "heroSubtitle": "A restored 1950s navy bungalow: three bedrooms, a walled garden and a private pool, ten minutes from Willemstad.",
+    "usp1Title": "Direct from the owner",
+    "usp1Text": "No platform in between: you book directly, at an honest price, with personal contact.",
+    "usp2Title": "Sleeps six",
+    "usp2Text": "Three air-conditioned bedrooms, two bathrooms, and a covered porch for long evenings.",
+    "usp3Title": "Private pool and garden",
+    "usp3Text": "A walled tropical garden with bougainvillea, palms and a pool serviced every week.",
+    "houseTeaser": "The house",
+    "houseTeaserText": "Built for navy officers, with the thick walls and high ceilings of that era — and the comfort of today.",
+    "islandTeaser": "The island",
+    "islandTeaserText": "From the bays of Westpunt to the swinging pontoon bridge: Curaçao is small enough for day trips and big enough to keep surprising you.",
+    "readMore": "Read more"
+  },
+  "house": {
+    "title": "The house",
+    "intro": "Kaya Platio 18 is a detached 1950s bungalow, built as housing for Dutch navy officers and fully restored in 2024. The original structure — thick walls, high ceilings, breezy rooms — was left intact; kitchen, bathrooms and installations are new.",
+    "bedroomsTitle": "Sleeping",
+    "bedroomsText": "Three bedrooms, each with air-conditioning and insect screens: a master with king-size bed and en-suite bathroom, a second room with a double bed and a third with two singles. Six guests in total.",
+    "livingTitle": "Living and cooking",
+    "livingText": "The living room opens through double doors onto the covered porch. The kitchen has a gas stove, dishwasher, oven and a large fridge — groceries are a five-minute drive at Centrum Supermarket.",
+    "outsideTitle": "Outside",
+    "outsideText": "The walled garden catches the trade wind and keeps the world out. The four-by-eight-metre pool is serviced weekly; sun loungers, an outdoor shower and a shaded dining table for six are ready.",
+    "factsTitle": "At a glance",
+    "facts": {
+      "bedrooms": "3 bedrooms · sleeps 6",
+      "bathrooms": "2 bathrooms",
+      "pool": "Private pool 4 × 8 m",
+      "aircon": "Air-conditioning in every bedroom",
+      "wifi": "Fast wifi throughout",
+      "parking": "Private parking behind the gate"
+    }
+  },
+  "gallery": {
+    "title": "Gallery",
+    "intro": "The house, the garden and the light of Curaçao — as you will find it.",
+    "categories": {
+      "all": "All",
+      "house": "The house",
+      "garden": "Garden and pool",
+      "island": "The island"
+    }
+  },
+  "island": {
+    "title": "The island",
+    "intro": "Curaçao is sixty kilometres long and everything is within an hour. From the house you reach downtown Willemstad in ten minutes, the beaches of Westpunt in forty.",
+    "beachesTitle": "Beaches",
+    "beachesText": "Cas Abao and Porto Mari for a day with a lounger and a beach bar; Grote Knip for the view on the postcards; Playa Lagun to snorkel with turtles. Go early — before ten you have the sand to yourself.",
+    "cityTitle": "Willemstad",
+    "cityText": "The pastel façades of Handelskade, the pontoon bridge swinging open for ships, the floating market where Venezuelan boats sell fruit. Park at the Rif Fort and walk; the city is small and at its best on foot.",
+    "foodTitle": "Food and drink",
+    "foodText": "From stoba and fresh catch at Plasa Bieu to fine dining in Pietermaai. Book ahead at weekends; on Tuesdays, the fishing harbour of Sint Michiel is the place for grilled fish.",
+    "divingTitle": "Under water",
+    "divingText": "The leeward reef coast is among the healthiest in the Caribbean. Dive schools five minutes from the house arrange certifications and guided dives; snorkelling starts right off the beach."
+  },
+  "rates": {
+    "title": "Rates and availability",
+    "intro": "Prices per night for the whole house, up to six guests. Book direct and pay no platform fees.",
+    "seasonHigh": "High season",
+    "seasonShoulder": "Shoulder season",
+    "seasonLow": "Low season",
+    "highDates": "15 December – 15 April",
+    "shoulderDates": "16 April – 30 June and 1 September – 14 December",
+    "lowDates": "1 July – 31 August",
+    "minStay": "minimum {nights} nights",
+    "cleaningFee": "Final cleaning: {amount} per stay",
+    "tax": "Turnover tax: {pct}% (mandatory Curaçao levy)",
+    "deposit": "30% deposit — balance due 35 days before arrival",
+    "calendarTitle": "Availability",
+    "calendarHint": "Green is free; struck-through is taken. Pick your dates on the booking page."
+  },
+  "book": {
+    "title": "Book",
+    "intro": "Pick your dates, review the price and pay by iDEAL or card. Your booking is final as soon as the (down) payment is in.",
+    "arrival": "Arrival",
+    "departure": "Departure",
+    "guestsLabel": "Guests",
+    "searchButton": "Calculate price",
+    "quoteTitle": "Your stay",
+    "unavailable": "These dates are taken. Please pick different dates.",
+    "minNightsError": "This period requires a minimum of {nights} nights.",
+    "noRate": "Part of this period has no rate configured yet. Please contact us.",
+    "cleaningFee": "Final cleaning",
+    "tax": "Turnover tax ({pct}%)",
+    "total": "Total",
+    "payDeposit": "30% deposit: {amount}",
+    "payDepositRest": "Balance {amount} before {date}",
+    "payFull": "Pay in full: {amount}",
+    "continueButton": "Continue with your details",
+    "detailsTitle": "Your details",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "E-mail address",
+    "phone": "Phone (for the key handover)",
+    "message": "Message (optional)",
+    "planTitle": "Payment",
+    "planDeposit": "30% deposit now, the rest later",
+    "planFull": "Everything at once",
+    "providerTitle": "Payment method",
+    "providerMollie": "iDEAL / card (Mollie)",
+    "providerStripe": "International card (Stripe)",
+    "providerFake": "Test payment",
+    "toPayment": "Proceed to payment",
+    "legalNote": "You will be taken to the secure payment environment. The price is recomputed on the server; you never pay a different amount than shown here.",
+    "holdNote": "We hold your dates for {minutes} minutes while you pay.",
+    "errors": {
+      "DATES_UNAVAILABLE": "These dates were just booked by someone else. Please pick different dates.",
+      "QUOTE_MISMATCH": "The price has changed in the meantime. Review the new total and try again.",
+      "RATE_LIMITED": "Too many attempts. Please wait a moment and try again.",
+      "GENERIC": "Something went wrong. Try again or contact us."
+    },
+    "status": {
+      "checking": "Checking your payment…",
+      "confirmedTitle": "Confirmed — see you on Curaçao!",
+      "confirmedText": "You will receive a confirmation e-mail with a calendar file within minutes. Booking reference: {reference}.",
+      "pendingTitle": "Payment not completed yet",
+      "pendingText": "Your payment has not been processed yet. As soon as it is, you will automatically receive a confirmation.",
+      "retryButton": "Try paying again",
+      "failedTitle": "Payment unsuccessful",
+      "failedText": "Nothing was charged. You can try again while we hold your dates.",
+      "expiredTitle": "Reservation expired",
+      "expiredText": "The payment window has passed and your dates have been released. Feel free to start again."
+    },
+    "calendar": {
+      "label": "Calendar, {month} {year}",
+      "prevMonth": "Previous month",
+      "nextMonth": "Next month",
+      "unavailableDay": "unavailable",
+      "selectedArrival": "selected as arrival",
+      "selectedDeparture": "selected as departure",
+      "weekdays": ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+    }
+  },
+  "practical": {
+    "title": "Practical",
+    "intro": "Everything for a smooth stay, from arrival to departure.",
+    "checkinTitle": "Check-in and check-out",
+    "checkinText": "Check-in from 3 pm, check-out by 11 am. Our property manager welcomes you in person and is reachable via WhatsApp throughout your stay.",
+    "travelTitle": "Getting there",
+    "travelText": "Fly to Hato (CUR); the house is a fifteen-minute drive from the airport. A rental car is close to essential on Curaçao — on request we reserve one for you with a local company.",
+    "healthTitle": "Good to know",
+    "healthText": "Tap water is excellent (distilled seawater). Power is 127V with US-style sockets; adapters are in the drawer under the TV. All windows have insect screens.",
+    "houseRulesTitle": "House rules",
+    "houseRulesText": "No smoking indoors; parties only by arrangement; the pool is unsupervised — look out for each other, especially with children.",
+    "cancellationTitle": "Cancellation",
+    "cancellationText": "Free cancellation until 60 days before arrival. Between 60 and 35 days: the deposit remains due. Within 35 days: the full amount. We recommend travel insurance."
+  },
+  "contact": {
+    "title": "Contact",
+    "intro": "Questions about the house or your booking? E-mail us — we usually reply within a day.",
+    "emailLabel": "E-mail",
+    "responseTime": "Usually a reply within 24 hours",
+    "addressTitle": "Address",
+    "bookingRefHint": "Please include your booking reference (LH-….) if you have already booked."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "This page does not exist (anymore). The sea is the other way.",
+    "backHome": "Back to home"
+  }
+}
