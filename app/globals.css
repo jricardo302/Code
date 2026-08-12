@@ -1,18 +1,30 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* Paars-palet: van licht lila (niveau 1) naar diep paars (niveau 3) */
-  --color-lila: #c9a8e0;
-  --color-paars: #8b5fbf;
-  --color-paars-diep: #3b1e4a;
-  --color-goud: #c9a227;
+/*
+ * Lighthouse Curaçao — design tokens.
+ *
+ * Deep ocean navy dominates; warm sand carries the light sections;
+ * terracotta is the single accent (buttons, highlights) and turquoise is
+ * reserved for interactive states: links, focus, hover. No gradients on
+ * buttons, no accent stripes on cards.
+ */
+@theme {
+  --color-navy: #0b2c3d;
+  --color-navy-soft: #123c52;
+  --color-navy-deep: #071e2b;
+  --color-sand: #f4efe6;
+  --color-sand-deep: #e9e1d2;
+  --color-terracotta: #b4552f;
+  --color-terracotta-deep: #93441f;
+  --color-turquoise: #1fa5a0;
+  --color-turquoise-deep: #157f7b;
+  --color-ink: #22333d;
+  --color-mist: #7d95a3;
 
-  /* Warme kraft-achtergronden */
-  --color-creme: #f5f0e4;
-  --color-kraft: #efe3cc;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
+  --radius-tile: 16px;
 }
 
 @layer base {
@@ -21,57 +33,117 @@
   }
 
   body {
-    background-color: var(--color-creme);
-    color: var(--color-paars-diep);
+    background-color: var(--color-sand);
+    color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
-  /* Kraftpapier: een fijne, onregelmatige korrel over de hele pagina. */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.5;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.28'/%3E%3C/svg%3E");
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    color: var(--color-navy);
+    letter-spacing: -0.01em;
   }
 
   ::selection {
-    background-color: var(--color-lila);
-    color: var(--color-paars-diep);
+    background-color: var(--color-turquoise);
+    color: #fff;
   }
 
   :focus-visible {
-    outline: 2px solid var(--color-paars);
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline: 2px solid var(--color-turquoise);
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-@utility tekst-balans {
-  text-wrap: balance;
-}
-
-/* Handgetekend ogende onderstreping voor accentwoorden in koppen. */
-@utility krijt-lijn {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 12' preserveAspectRatio='none'%3E%3Cpath d='M2 8.5c22-4 42-5 62-3.5s34 2 54-1' stroke='%23C9A227' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: 0 88%;
-  background-size: 100% 0.45em;
-  padding-bottom: 0.08em;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
+@layer components {
+  /*
+   * The one recurring motif: a thin horizon line with a soft radial glow.
+   * Used in the hero and the footer only — nowhere else.
+   */
+  .horizon-line {
+    position: relative;
+    height: 1px;
+    background: color-mix(in srgb, var(--color-turquoise) 55%, transparent);
   }
 
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.001ms !important;
-    transition-duration: 0.001ms !important;
+  .horizon-line::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(640px, 80vw);
+    height: 160px;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      color-mix(in srgb, var(--color-turquoise) 22%, transparent) 0%,
+      transparent 65%
+    );
+  }
+
+  /* Image tiles: the 16px rounding, everywhere an image sits on a card. */
+  .tile {
+    border-radius: var(--radius-tile);
+    overflow: hidden;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: var(--color-terracotta);
+    color: #fff;
+    font-weight: 600;
+    padding: 0.75rem 1.75rem;
+    border-radius: 0.625rem;
+    transition: background-color 150ms ease;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus-visible {
+    background-color: var(--color-turquoise-deep);
+  }
+
+  .btn-primary:disabled {
+    background-color: var(--color-mist);
+    cursor: not-allowed;
+  }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border: 1.5px solid var(--color-navy);
+    color: var(--color-navy);
+    font-weight: 600;
+    padding: 0.7rem 1.6rem;
+    border-radius: 0.625rem;
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+
+  .btn-secondary:hover,
+  .btn-secondary:focus-visible {
+    border-color: var(--color-turquoise);
+    color: var(--color-turquoise-deep);
   }
 }
