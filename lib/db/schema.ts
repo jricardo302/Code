@@ -71,6 +71,8 @@ export const paymentProvider = pgEnum("payment_provider", [
   "stripe",
   /** Bank transfer or cash, registered by hand in /admin. */
   "manual",
+  /** Dev/E2E only; the FakeProvider refuses to construct in production. */
+  "fake",
 ]);
 
 export const paymentKind = pgEnum("payment_kind", [

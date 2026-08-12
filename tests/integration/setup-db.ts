@@ -6,7 +6,7 @@
  */
 
 import { execFileSync, execSync } from "node:child_process";
-import { existsSync, mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -48,7 +48,10 @@ export async function startTestCluster(): Promise<TestCluster> {
   run(wrap(`${PG_BIN}/createdb -h ${dataDir} -p ${PORT} -U postgres lighthouse_test`));
 
   // Apply the real migrations, in journal order, exactly as production would.
-  for (const file of ["0000_init.sql", "0001_booking_exclusion.sql", "0002_rate_limits.sql", "0003_guests_email_plain_unique.sql", "0004_booking_reference_seq.sql"]) {
+  const journal = JSON.parse(
+    readFileSync(path.join(process.cwd(), "drizzle/meta/_journal.json"), "utf8"),
+  ) as { entries: { tag: string }[] };
+  for (const file of journal.entries.map((e) => `${e.tag}.sql`)) {
     execFileSync("psql", [
       "-h", dataDir, "-p", String(PORT), "-U", "postgres", "-d", "lighthouse_test",
       "-v", "ON_ERROR_STOP=1", "-q", "-f", path.join(process.cwd(), "drizzle", file),
