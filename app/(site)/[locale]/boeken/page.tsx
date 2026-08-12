@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { BookingWizard } from "@/components/booking/BookingWizard";
 import { loadPricingContext } from "@/lib/booking/service";
 import { getDb } from "@/lib/db/client";
@@ -26,6 +27,7 @@ export default async function BookPage({
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations("book");
+  const messages = await getMessages();
   const ctx = await loadPricingContext(getDb(), PROPERTY_SLUG);
 
   return (
@@ -33,7 +35,9 @@ export default async function BookPage({
       <h1 className="text-4xl md:text-5xl">{t("title")}</h1>
       <p className="mt-4 max-w-2xl text-lg leading-8 text-ink/85">{t("intro")}</p>
       <div className="mt-12">
-        <BookingWizard providers={enabledProviders()} holdMinutes={ctx.property.holdMinutes} />
+        <NextIntlClientProvider messages={{ common: messages.common, book: messages.book }}>
+          <BookingWizard providers={enabledProviders()} holdMinutes={ctx.property.holdMinutes} />
+        </NextIntlClientProvider>
       </div>
     </div>
   );

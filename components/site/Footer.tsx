@@ -20,13 +20,13 @@ export async function Footer() {
           <p className="mt-3 text-sm font-medium text-turquoise">{t("directBooking")}</p>
         </div>
         <nav aria-label={tn("home")} className="grid grid-cols-2 gap-2 text-sm">
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/huis">{tn("house")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/galerij">{tn("gallery")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/eiland">{tn("island")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/tarieven">{tn("rates")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/boeken">{tn("book")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/praktisch">{tn("practical")}</Link>
-          <Link className="py-1 text-sand/80 hover:text-turquoise" href="/contact">{tn("contact")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/huis">{tn("house")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/galerij">{tn("gallery")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/eiland">{tn("island")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/tarieven">{tn("rates")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/boeken">{tn("book")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/praktisch">{tn("practical")}</Link>
+          <Link className="inline-block py-2 text-sand/80 hover:text-turquoise" href="/contact">{tn("contact")}</Link>
         </nav>
         <div className="text-sm text-sand/70">
           <a href={`mailto:${CONTACT_EMAIL}`} className="text-turquoise hover:underline">

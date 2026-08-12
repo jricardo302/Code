@@ -46,7 +46,7 @@ export default async function AdminLoginPage({
           />
         </label>
         {fout ? (
-          <p role="alert" className="text-sm text-terracotta">
+          <p role="alert" className="text-sm text-terracotta-deep">
             Onjuiste inloggegevens.
           </p>
         ) : null}

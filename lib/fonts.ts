@@ -6,11 +6,12 @@
 
 import { Fraunces, Inter } from "next/font/google";
 
+// Weight axis only: the optical-size/softness/wonk axes triple the font
+// payload for a difference headings at these sizes barely show.
 export const fraunces = Fraunces({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-fraunces",
-  axes: ["SOFT", "WONK", "opsz"],
 });
 
 export const inter = Inter({

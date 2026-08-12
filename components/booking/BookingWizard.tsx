@@ -383,11 +383,11 @@ export function BookingWizard({ providers, holdMinutes }: Props) {
           ) : quoteState.kind === "loading" ? (
             <p className="mt-4 text-sm text-sand/70">{tc("loading")}</p>
           ) : quoteState.kind === "error" ? (
-            <p className="mt-4 text-sm leading-6 text-terracotta" role="alert">
+            <p className="mt-4 text-sm leading-6 text-terracotta-tint" role="alert">
               {errorText}
             </p>
           ) : !quote!.available ? (
-            <p className="mt-4 text-sm leading-6 text-terracotta" role="alert">
+            <p className="mt-4 text-sm leading-6 text-terracotta-tint" role="alert">
               {t("unavailable")}
             </p>
           ) : (
@@ -423,7 +423,7 @@ export function BookingWizard({ providers, holdMinutes }: Props) {
                 {submitting ? tc("loading") : t("toPayment")}
               </button>
               {submitError ? (
-                <p role="alert" className="mt-3 text-sm text-terracotta">
+                <p role="alert" className="mt-3 text-sm text-terracotta-tint">
                   {t(
                     submitError === "DATES_UNAVAILABLE" ? "errors.DATES_UNAVAILABLE"
                     : submitError === "QUOTE_MISMATCH" ? "errors.QUOTE_MISMATCH"

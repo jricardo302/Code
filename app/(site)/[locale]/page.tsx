@@ -119,7 +119,7 @@ export default async function HomePage({
           </div>
           <h2 className="mt-4 text-2xl group-hover:text-turquoise-deep">{t("houseTeaser")}</h2>
           <p className="mt-1 leading-7 text-ink/80">{t("houseTeaserText")}</p>
-          <span className="mt-2 inline-block font-medium text-terracotta">{t("readMore")} →</span>
+          <span className="mt-2 inline-block font-medium text-terracotta-deep">{t("readMore")} →</span>
         </Link>
         <Link href="/eiland" className="group">
           <div className="tile relative aspect-[4/3]">
@@ -134,7 +134,7 @@ export default async function HomePage({
           </div>
           <h2 className="mt-4 text-2xl group-hover:text-turquoise-deep">{t("islandTeaser")}</h2>
           <p className="mt-1 leading-7 text-ink/80">{t("islandTeaserText")}</p>
-          <span className="mt-2 inline-block font-medium text-terracotta">{t("readMore")} →</span>
+          <span className="mt-2 inline-block font-medium text-terracotta-deep">{t("readMore")} →</span>
         </Link>
       </section>
     </>

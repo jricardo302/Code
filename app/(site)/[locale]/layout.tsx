@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
-import { getTranslations, setRequestLocale } from "next-intl/server";
+import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import Script from "next/script";
 import { routing } from "@/i18n/routing";
 import { fontClasses } from "@/lib/fonts";
@@ -54,6 +54,11 @@ export default async function LocaleLayout({
   const t = await getTranslations({ locale, namespace: "common" });
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
 
+  // Only what client components in the shell use crosses the wire; pages
+  // with heavier client parts (the booking wizard) add their own provider.
+  const messages = await getMessages();
+  const clientMessages = { common: messages.common, nav: messages.nav };
+
   return (
     <html lang={locale} className={fontClasses}>
       <body>
@@ -63,7 +68,7 @@ export default async function LocaleLayout({
         >
           {t("skipToContent")}
         </a>
-        <NextIntlClientProvider>
+        <NextIntlClientProvider messages={clientMessages}>
           <Header />
           <main id="main">{children}</main>
           <Footer />

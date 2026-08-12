@@ -15,9 +15,13 @@
   --color-sand: #f4efe6;
   --color-sand-deep: #e9e1d2;
   --color-terracotta: #b4552f;
+  /* Text-safe terracotta: 5.9:1 on sand (the base is 4.3:1 — fills only). */
   --color-terracotta-deep: #93441f;
+  /* Alert text on navy surfaces: 7.3:1 on navy. */
+  --color-terracotta-tint: #f1a583;
   --color-turquoise: #1fa5a0;
-  --color-turquoise-deep: #157f7b;
+  /* Text-safe turquoise: 5.2:1 on sand. */
+  --color-turquoise-deep: #12706c;
   --color-ink: #22333d;
   --color-mist: #7d95a3;
 
