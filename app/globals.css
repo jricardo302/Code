@@ -11,6 +11,20 @@
   --color-creme: #f5f0e4;
   --color-kraft: #efe3cc;
 
+  /* --- Huisstijl Ricardo Jeugdhulp (sectie /vraagbaak) ---------------------
+     Donkerblauw is de hoofdkleur, groen het accent. De lichte tinten zijn
+     afgeleiden voor vlakken en randen, nooit voor merkelementen zelf. */
+  --color-rj-blauw: #171c33;
+  --color-rj-groen: #b6cd57;
+  --color-rj-groen-licht: #eef4d8;
+  --color-rj-blauw-licht: #e8eaf0;
+  --color-rj-mist: #f3f4f8;
+  --color-rj-grijs: #4a4e5a;
+  --color-rj-lijn: #d5d8e0;
+
+  /* Mont is het huisstijl-lettertype; Montserrat is de vrije terugval. */
+  --font-rj: "Mont", var(--font-montserrat), "Segoe UI", Arial, sans-serif;
+
   --font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-sans: var(--font-nunito), ui-sans-serif, system-ui, sans-serif;
 }
