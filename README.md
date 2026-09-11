@@ -1,16 +1,73 @@
-# Ik zie ik zie…
+# Ik zie ik zie… en de Vraagbaak
 
-Landingspagina en aanvraagformulier voor **Ik zie ik zie…**, het intervisiespel
-voor behandelaren en begeleiders in de jeugdzorg. Een gesprekskaartspel met
-100 vragen en drie niveaus.
+In deze repo draaien twee dingen naast elkaar in één Next.js-app. Ze delen
+alleen de build; verder hebben ze hun eigen layout, huisstijl en lettertype.
 
-Drie routes:
+1. **Ik zie ik zie…** — de publieke landingspagina en het aanvraagformulier
+   voor het intervisiespel voor de jeugdzorg.
+2. **Vraagbaak** (`/vraagbaak`) — de interne kennisbank van Ricardo Jeugdhulp,
+   in hun eigen huisstijl. Niet openbaar bedoeld: de sectie staat op
+   `noindex` en in `robots.txt`.
 
 | Route        | Wat het is                                                              |
 | ------------ | ----------------------------------------------------------------------- |
 | `/`          | Landingspagina: waarom het spel bestaat, de drie niveaus, voor wie       |
 | `/aanvragen` | Aanvraagformulier (interesse-registratie, geen betaling)                |
 | `/beheer`    | Overzicht van binnengekomen aanvragen + CSV-export, achter een wachtwoord |
+| `/vraagbaak` | De kennisbank van Ricardo Jeugdhulp — zie hieronder                     |
+
+## De Vraagbaak
+
+De vertaling van de Drive-kennisbank ("Kennisbank Ricardo Jeugdhulp", versie 1.3
+van 5 september 2026) naar iets waar een begeleider tussen twee afspraken door
+in kan duiken.
+
+| Route                   | Map in Drive                | Wat het toevoegt                                           |
+| ----------------------- | --------------------------- | ---------------------------------------------------------- |
+| `/vraagbaak`            | 00 Start hier               | Zoeken, de drie dingen die je meteen moet weten, wie is wie |
+| `/vraagbaak/over`       | 01 Over Ricardo Jeugdhulp   | Missie, doelgroepen, methodieken, gemeenten, weekrooster    |
+| `/vraagbaak/inwerken`   | 02 Inwerken en onboarding   | Afvinkbare onboardingchecklist + inwerkplan 30-60-90        |
+| `/vraagbaak/rollen`     | 03 Rollen en taken          | Rolkiezer die onthoudt welke rol jij hebt                   |
+| `/vraagbaak/nood`       | 04 Protocollen en veiligheid| Escalatiekaart met filter, belbare nummers, protocollijst   |
+| `/vraagbaak/werk`       | 05 Werkprocessen en formats | Verlengwijzer per verwijzer, uren, dossierregels, formats   |
+| `/vraagbaak/systemen`   | 06 Systemen en accounts     | Per systeem wat het is en hoe je het activeert              |
+| `/vraagbaak/huisstijl`  | 07 Huisstijl en communicatie| E-mailhandtekening-bouwer, kleuren, schrijfregels           |
+| `/vraagbaak/vragen`     | 08 Vraagbaak                | FAQ per categorie + doorzoekbare begrippenlijst             |
+| `/vraagbaak/quiz`       | —                           | Tien vragen, elk antwoord linkt naar de bron                |
+
+Wat de app kan dat een map met documenten niet kan:
+
+- **Zoeken over alles tegelijk** (⌘K of Ctrl+K). De index wordt bij het laden van
+  `lib/vraagbaak/zoek.ts` opgebouwd uit alle inhoudsmodules en client-side
+  doorzocht — geen netwerkverkeer per toetsaanslag. Diakrieten worden genegeerd,
+  dus "suicide" vindt "suïcide". Escalatiesituaties krijgen voorrang: wie in een
+  crisis zoekt, wil de stappen zien en niet een vinkje uit de inwerklijst.
+- **Onthouden wat van jou is**: je rol, je dienstverband, welke inwerkpunten je
+  hebt afgevinkt en je beste quizscore. Alles in `localStorage`, in de browser
+  van de medewerker. Er gaat niets naar een server — er staan dus ook nooit
+  cliënt- of personeelsgegevens in.
+- **Beslissen in plaats van opzoeken**: de verlengwijzer vraagt wie de
+  beschikking heeft afgegeven en geeft dan de termijn en de route, met het
+  onderscheid tussen een vastgelegde eis (JGZ: twee maanden) en een interne
+  werknorm.
+
+### Inhoud aanpassen
+
+De teksten staan als getypeerde data in `lib/vraagbaak/`, één module per
+Drive-map, met bovenaan de bron en het versienummer. Wijzigt er iets in de
+kennisbank, dan pas je die module aan; de pagina's, de zoekindex en de quiz
+volgen vanzelf. De protocollen zelf blijven in de kwaliteitsmap staan — de app
+linkt ernaar en kopieert ze niet, zodat er één geldige versie is en het
+auditspoor klopt.
+
+### Huisstijl
+
+Donkerblauw `#171C33` als hoofdkleur, groen `#B6CD57` als accent, wit als
+basis, en het logo rechtsboven. Het lettertype is Mont met Montserrat als vrije
+terugval; de stack in `--font-rj` zet Mont vooraan, zodat het native rendert bij
+wie het geïnstalleerd heeft. De tokens staan als `--color-rj-*` in
+`app/globals.css` en gelden alleen binnen `/vraagbaak`, waar `app/vraagbaak/layout.tsx`
+zijn eigen ondergrond en lettertype zet.
 
 ## Techniek
 
@@ -176,10 +233,24 @@ app/
     LoginFormulier.tsx
     actions.ts                in- en uitloggen
     export/route.ts           CSV-download
+  vraagbaak/
+    layout.tsx                eigen schil: huisstijl, lettertype, noindex
+    page.tsx                  start: zoeken, drie dingen, wie is wie
+    over|inwerken|rollen|nood|werk|systemen|huisstijl|vragen|quiz/
 components/
   Kaartendoos.tsx             voor- en achterkant van de doos in SVG
   Merk.tsx                    woordmerk + ondertekst, header, footer
+  vraagbaak/
+    ui.tsx                    kop, kaart, stappen, tabel, iconen
+    Schil.tsx                 header met logo rechtsboven, footer
+    Zoeken.tsx                één zoekvenster voor de hele app (⌘K)
+    Checklist.tsx             onboardingchecklist met voortgang
+    Verlengwijzer.tsx         verwijzer kiezen → termijn en route
+    Quiz.tsx                  tien vragen met bron bij elk antwoord
 lib/
+  vraagbaak/                  de inhoud als data, één module per Drive-map
+    zoek.ts                   bouwt de zoekindex uit alle modules
+    opslag.ts                 localStorage-haak (rol, checklist, score)
   schema.ts                   zod-schema, gedeeld door client en server
   store/                      json- en postgres-driver achter één interface
   csv.ts                      CSV-export
