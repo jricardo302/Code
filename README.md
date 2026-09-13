@@ -1,16 +1,103 @@
-# Ik zie ik zie…
+# Ik zie ik zie… en de Vraagbaak
 
-Landingspagina en aanvraagformulier voor **Ik zie ik zie…**, het intervisiespel
-voor behandelaren en begeleiders in de jeugdzorg. Een gesprekskaartspel met
-100 vragen en drie niveaus.
+In deze repo draaien twee dingen naast elkaar in één Next.js-app. Ze delen
+alleen de build; verder hebben ze hun eigen layout, huisstijl en lettertype.
 
-Drie routes:
+1. **Ik zie ik zie…** — de publieke landingspagina en het aanvraagformulier
+   voor het intervisiespel voor de jeugdzorg.
+2. **Vraagbaak** (`/vraagbaak`) — de interne kennisbank van Ricardo Jeugdhulp,
+   in hun eigen huisstijl. Niet openbaar bedoeld: de sectie staat op
+   `noindex` en in `robots.txt`.
 
 | Route        | Wat het is                                                              |
 | ------------ | ----------------------------------------------------------------------- |
 | `/`          | Landingspagina: waarom het spel bestaat, de drie niveaus, voor wie       |
 | `/aanvragen` | Aanvraagformulier (interesse-registratie, geen betaling)                |
 | `/beheer`    | Overzicht van binnengekomen aanvragen + CSV-export, achter een wachtwoord |
+| `/vraagbaak` | De kennisbank van Ricardo Jeugdhulp — zie hieronder                     |
+
+## De Vraagbaak
+
+De vertaling van de Drive-kennisbank ("Kennisbank Ricardo Jeugdhulp", versie 1.3
+van 5 september 2026) naar iets waar een begeleider tussen twee afspraken door
+in kan duiken.
+
+| Route                   | Map in Drive                | Wat het toevoegt                                           |
+| ----------------------- | --------------------------- | ---------------------------------------------------------- |
+| `/vraagbaak`            | 00 Start hier               | Zoeken, de drie dingen die je meteen moet weten, wie is wie |
+| `/vraagbaak/over`       | 01 Over Ricardo Jeugdhulp   | Missie, doelgroepen, methodieken, gemeenten, weekrooster    |
+| `/vraagbaak/inwerken`   | 02 Inwerken en onboarding   | Afvinkbare onboardingchecklist + inwerkplan 30-60-90        |
+| `/vraagbaak/rollen`     | 03 Rollen en taken          | Rolkiezer die onthoudt welke rol jij hebt                   |
+| `/vraagbaak/nood`       | 04 Protocollen en veiligheid| Escalatiekaart met filter, belbare nummers, protocollijst   |
+| `/vraagbaak/werk`       | 05 Werkprocessen en formats | Verlengwijzer per verwijzer, uren, dossierregels, formats   |
+| `/vraagbaak/systemen`   | 06 Systemen en accounts     | Per systeem wat het is en hoe je het activeert              |
+| `/vraagbaak/huisstijl`  | 07 Huisstijl en communicatie| E-mailhandtekening-bouwer, kleuren, schrijfregels           |
+| `/vraagbaak/vragen`     | 08 Vraagbaak                | FAQ per categorie + doorzoekbare begrippenlijst             |
+| `/vraagbaak/quiz`       | —                           | Tien vragen, elk antwoord linkt naar de bron                |
+
+Wat de app kan dat een map met documenten niet kan:
+
+- **Zoeken over alles tegelijk** (⌘K of Ctrl+K). De index wordt bij het laden van
+  `lib/vraagbaak/zoek.ts` opgebouwd uit alle inhoudsmodules en client-side
+  doorzocht — geen netwerkverkeer per toetsaanslag. Diakrieten worden genegeerd,
+  dus "suicide" vindt "suïcide". Escalatiesituaties krijgen voorrang: wie in een
+  crisis zoekt, wil de stappen zien en niet een vinkje uit de inwerklijst.
+- **Onthouden wat van jou is**: je rol, je dienstverband, welke inwerkpunten je
+  hebt afgevinkt en je beste quizscore. Alles in `localStorage`, in de browser
+  van de medewerker. Er gaat niets naar een server — er staan dus ook nooit
+  cliënt- of personeelsgegevens in.
+- **Beslissen in plaats van opzoeken**: de verlengwijzer vraagt wie de
+  beschikking heeft afgegeven en geeft dan de termijn en de route, met het
+  onderscheid tussen een vastgelegde eis (JGZ: twee maanden) en een interne
+  werknorm.
+
+### Wie erin mag
+
+De vraagbaak zit achter een inlog met Google Workspace. Alleen een account op
+een toegestaan domein komt binnen; een privé-Gmail wordt geweigerd. Neemt iemand
+ontslag, dan sluit je zijn Workspace-account en is hij ook hier buiten.
+
+De opzet staat in `lib/vraagbaak/toegang.ts` en volgt die van `/beheer`: na het
+inloggen bij Google zet de app één cookie met naam, mailadres en een vervaltijd
+van twaalf uur, ondertekend met HMAC. Er is geen gebruikersdatabase en geen
+wachtwoord in de app.
+
+| Onderdeel                      | Waar                                |
+| ------------------------------ | ----------------------------------- |
+| Inlogpagina                    | `/inloggen`                         |
+| Start van de Google-omleiding  | `/api/vraagbaak/inloggen`           |
+| Omleidingsadres voor Google    | `/api/vraagbaak/terug`              |
+| Afmelden (POST)                | `/api/vraagbaak/afmelden`           |
+
+`app/vraagbaak/layout.tsx` is de enige poort: staat er geen geldige cookie, dan
+gaat elk pad onder `/vraagbaak` naar `/inloggen` — ook een diepe link. De sectie
+staat daarom op `force-dynamic`, zodat die controle bij elk bezoek draait.
+
+**Zonder `GOOGLE_CLIENT_ID` en `GOOGLE_CLIENT_SECRET` blijft de vraagbaak voor
+iedereen dicht.** Dat is met opzet: een vergeten instelling zet de deur niet
+open maar op slot.
+
+Het omleidingsadres wordt afgeleid uit `NEXT_PUBLIC_SITE_URL` en moet
+letterlijk overeenkomen met wat in Google Cloud staat geregistreerd:
+`https://jouwdomein.nl/api/vraagbaak/terug`.
+
+### Inhoud aanpassen
+
+De teksten staan als getypeerde data in `lib/vraagbaak/`, één module per
+Drive-map, met bovenaan de bron en het versienummer. Wijzigt er iets in de
+kennisbank, dan pas je die module aan; de pagina's, de zoekindex en de quiz
+volgen vanzelf. De protocollen zelf blijven in de kwaliteitsmap staan — de app
+linkt ernaar en kopieert ze niet, zodat er één geldige versie is en het
+auditspoor klopt.
+
+### Huisstijl
+
+Donkerblauw `#171C33` als hoofdkleur, groen `#B6CD57` als accent, wit als
+basis, en het logo rechtsboven. Het lettertype is Mont met Montserrat als vrije
+terugval; de stack in `--font-rj` zet Mont vooraan, zodat het native rendert bij
+wie het geïnstalleerd heeft. De tokens staan als `--color-rj-*` in
+`app/globals.css` en gelden alleen binnen `/vraagbaak`, waar `app/vraagbaak/layout.tsx`
+zijn eigen ondergrond en lettertype zet.
 
 ## Techniek
 
@@ -44,6 +131,10 @@ dan in `data/aanvragen.json` te staan (die map staat in `.gitignore`).
 | Variabele                  | Verplicht        | Waarvoor                                                          |
 | -------------------------- | ---------------- | ----------------------------------------------------------------- |
 | `BEHEER_WACHTWOORD`        | voor `/beheer`   | Wachtwoord van het beheeroverzicht                                 |
+| `GOOGLE_CLIENT_ID`         | voor `/vraagbaak`| OAuth-client uit Google Cloud. Leeg = vraagbaak dicht              |
+| `GOOGLE_CLIENT_SECRET`     | voor `/vraagbaak`| Bijbehorend secret. Leeg = vraagbaak dicht                         |
+| `VRAAGBAAK_DOMEIN`         | nee              | Toegestane maildomeinen (standaard `ricardojeugdhulp.nl`)          |
+| `VRAAGBAAK_SESSIE_GEHEIM`  | nee              | Sleutel voor de sessiecookie. Leeg = afgeleid uit het client-secret |
 | `DATABASE_URL`             | in productie     | Postgres-verbinding. Leeg = JSON-bestand                           |
 | `AANVRAGEN_BESTAND`        | nee              | Ander pad voor het JSON-bestand                                    |
 | `NEXT_PUBLIC_SITE_URL`     | aanbevolen       | Volledige URL, voor canonical-links, sitemap en Open Graph-tags    |
@@ -119,6 +210,33 @@ Download eerst de CSV via `/beheer` — dat is de makkelijkste weg naar `COPY`.
 Vergeet `DATABASE_URL` niet: zonder die variabele start de site wel, maar
 verdwijnen aanvragen bij elke deploy. De server logt daar een waarschuwing over.
 
+### De vraagbaak openzetten voor collega's
+
+De vraagbaak blijft na het deployen dicht tot de Google-koppeling staat.
+
+1. Ga naar [console.cloud.google.com](https://console.cloud.google.com) en maak
+   een project aan (of kies een bestaand project van de organisatie).
+2. **APIs & Services → OAuth consent screen**: kies **Internal**, zodat alleen
+   accounts van je eigen Workspace kunnen inloggen. Vul naam en steunmailadres in.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**,
+   type **Web application**.
+4. Zet onder **Authorized redirect URIs** exact:
+   `https://jouwdomein.nl/api/vraagbaak/terug`
+   Dit adres moet letterlijk kloppen, inclusief `https` en zonder slash erachter.
+5. Kopieer de client-ID en het client-secret naar Vercel, onder
+   **Settings → Environment Variables**:
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
+   - `NEXT_PUBLIC_SITE_URL` — moet gelijk zijn aan het domein uit stap 4
+   - `VRAAGBAAK_DOMEIN` — alleen nodig als je een ander domein dan
+     `ricardojeugdhulp.nl` wilt toelaten
+6. Deploy opnieuw, zodat de nieuwe variabelen meegaan.
+7. Ga naar `https://jouwdomein.nl/vraagbaak`. Je hoort op de inlogpagina te
+   belanden; na het inloggen sta je in de vraagbaak.
+
+Deelt iemand de link buiten de organisatie, dan komt die persoon niet verder dan
+de inlogpagina.
+
 ## De bevestigingsmail (optioneel)
 
 Standaard wordt er **geen** mail verstuurd — de aanvraag wordt alleen opgeslagen
@@ -176,10 +294,24 @@ app/
     LoginFormulier.tsx
     actions.ts                in- en uitloggen
     export/route.ts           CSV-download
+  vraagbaak/
+    layout.tsx                eigen schil: huisstijl, lettertype, noindex
+    page.tsx                  start: zoeken, drie dingen, wie is wie
+    over|inwerken|rollen|nood|werk|systemen|huisstijl|vragen|quiz/
 components/
   Kaartendoos.tsx             voor- en achterkant van de doos in SVG
   Merk.tsx                    woordmerk + ondertekst, header, footer
+  vraagbaak/
+    ui.tsx                    kop, kaart, stappen, tabel, iconen
+    Schil.tsx                 header met logo rechtsboven, footer
+    Zoeken.tsx                één zoekvenster voor de hele app (⌘K)
+    Checklist.tsx             onboardingchecklist met voortgang
+    Verlengwijzer.tsx         verwijzer kiezen → termijn en route
+    Quiz.tsx                  tien vragen met bron bij elk antwoord
 lib/
+  vraagbaak/                  de inhoud als data, één module per Drive-map
+    zoek.ts                   bouwt de zoekindex uit alle modules
+    opslag.ts                 localStorage-haak (rol, checklist, score)
   schema.ts                   zod-schema, gedeeld door client en server
   store/                      json- en postgres-driver achter één interface
   csv.ts                      CSV-export
