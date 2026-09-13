@@ -51,6 +51,36 @@ Wat de app kan dat een map met documenten niet kan:
   onderscheid tussen een vastgelegde eis (JGZ: twee maanden) en een interne
   werknorm.
 
+### Wie erin mag
+
+De vraagbaak zit achter een inlog met Google Workspace. Alleen een account op
+een toegestaan domein komt binnen; een privé-Gmail wordt geweigerd. Neemt iemand
+ontslag, dan sluit je zijn Workspace-account en is hij ook hier buiten.
+
+De opzet staat in `lib/vraagbaak/toegang.ts` en volgt die van `/beheer`: na het
+inloggen bij Google zet de app één cookie met naam, mailadres en een vervaltijd
+van twaalf uur, ondertekend met HMAC. Er is geen gebruikersdatabase en geen
+wachtwoord in de app.
+
+| Onderdeel                      | Waar                                |
+| ------------------------------ | ----------------------------------- |
+| Inlogpagina                    | `/inloggen`                         |
+| Start van de Google-omleiding  | `/api/vraagbaak/inloggen`           |
+| Omleidingsadres voor Google    | `/api/vraagbaak/terug`              |
+| Afmelden (POST)                | `/api/vraagbaak/afmelden`           |
+
+`app/vraagbaak/layout.tsx` is de enige poort: staat er geen geldige cookie, dan
+gaat elk pad onder `/vraagbaak` naar `/inloggen` — ook een diepe link. De sectie
+staat daarom op `force-dynamic`, zodat die controle bij elk bezoek draait.
+
+**Zonder `GOOGLE_CLIENT_ID` en `GOOGLE_CLIENT_SECRET` blijft de vraagbaak voor
+iedereen dicht.** Dat is met opzet: een vergeten instelling zet de deur niet
+open maar op slot.
+
+Het omleidingsadres wordt afgeleid uit `NEXT_PUBLIC_SITE_URL` en moet
+letterlijk overeenkomen met wat in Google Cloud staat geregistreerd:
+`https://jouwdomein.nl/api/vraagbaak/terug`.
+
 ### Inhoud aanpassen
 
 De teksten staan als getypeerde data in `lib/vraagbaak/`, één module per
@@ -101,6 +131,10 @@ dan in `data/aanvragen.json` te staan (die map staat in `.gitignore`).
 | Variabele                  | Verplicht        | Waarvoor                                                          |
 | -------------------------- | ---------------- | ----------------------------------------------------------------- |
 | `BEHEER_WACHTWOORD`        | voor `/beheer`   | Wachtwoord van het beheeroverzicht                                 |
+| `GOOGLE_CLIENT_ID`         | voor `/vraagbaak`| OAuth-client uit Google Cloud. Leeg = vraagbaak dicht              |
+| `GOOGLE_CLIENT_SECRET`     | voor `/vraagbaak`| Bijbehorend secret. Leeg = vraagbaak dicht                         |
+| `VRAAGBAAK_DOMEIN`         | nee              | Toegestane maildomeinen (standaard `ricardojeugdhulp.nl`)          |
+| `VRAAGBAAK_SESSIE_GEHEIM`  | nee              | Sleutel voor de sessiecookie. Leeg = afgeleid uit het client-secret |
 | `DATABASE_URL`             | in productie     | Postgres-verbinding. Leeg = JSON-bestand                           |
 | `AANVRAGEN_BESTAND`        | nee              | Ander pad voor het JSON-bestand                                    |
 | `NEXT_PUBLIC_SITE_URL`     | aanbevolen       | Volledige URL, voor canonical-links, sitemap en Open Graph-tags    |
@@ -175,6 +209,33 @@ Download eerst de CSV via `/beheer` — dat is de makkelijkste weg naar `COPY`.
 
 Vergeet `DATABASE_URL` niet: zonder die variabele start de site wel, maar
 verdwijnen aanvragen bij elke deploy. De server logt daar een waarschuwing over.
+
+### De vraagbaak openzetten voor collega's
+
+De vraagbaak blijft na het deployen dicht tot de Google-koppeling staat.
+
+1. Ga naar [console.cloud.google.com](https://console.cloud.google.com) en maak
+   een project aan (of kies een bestaand project van de organisatie).
+2. **APIs & Services → OAuth consent screen**: kies **Internal**, zodat alleen
+   accounts van je eigen Workspace kunnen inloggen. Vul naam en steunmailadres in.
+3. **APIs & Services → Credentials → Create credentials → OAuth client ID**,
+   type **Web application**.
+4. Zet onder **Authorized redirect URIs** exact:
+   `https://jouwdomein.nl/api/vraagbaak/terug`
+   Dit adres moet letterlijk kloppen, inclusief `https` en zonder slash erachter.
+5. Kopieer de client-ID en het client-secret naar Vercel, onder
+   **Settings → Environment Variables**:
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
+   - `NEXT_PUBLIC_SITE_URL` — moet gelijk zijn aan het domein uit stap 4
+   - `VRAAGBAAK_DOMEIN` — alleen nodig als je een ander domein dan
+     `ricardojeugdhulp.nl` wilt toelaten
+6. Deploy opnieuw, zodat de nieuwe variabelen meegaan.
+7. Ga naar `https://jouwdomein.nl/vraagbaak`. Je hoort op de inlogpagina te
+   belanden; na het inloggen sta je in de vraagbaak.
+
+Deelt iemand de link buiten de organisatie, dan komt die persoon niet verder dan
+de inlogpagina.
 
 ## De bevestigingsmail (optioneel)
 

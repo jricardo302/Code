@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MAILADRESSEN, ORGANISATIE } from "@/lib/vraagbaak/organisatie";
+import type { Gebruiker } from "@/lib/vraagbaak/toegang";
 import { KENNISBANK } from "@/lib/vraagbaak/secties";
 
 import { Nav } from "./Nav";
@@ -72,7 +73,7 @@ function NoodKnop() {
   );
 }
 
-export function Footer() {
+export function Footer({ gebruiker }: { gebruiker: Gebruiker }) {
   return (
     <footer className="mt-16 bg-rj-blauw text-white/80">
       <div className="mx-auto max-w-5xl px-5 py-12">
@@ -138,10 +139,29 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-10 border-t border-white/15 pt-6 text-xs text-white/50">
-          Geen cliëntgegevens in deze app. Cliëntinformatie hoort uitsluitend in
-          Zilliz. Deel deze vraagbaak niet buiten de organisatie.
-        </p>
+        <div className="mt-10 flex flex-col gap-4 border-t border-white/15 pt-6 sm:flex-row sm:items-start sm:justify-between">
+          <p className="text-xs text-white/50 sm:max-w-xl">
+            Geen cliëntgegevens in deze app. Cliëntinformatie hoort uitsluitend
+            in Zilliz. Deel deze vraagbaak niet buiten de organisatie.
+          </p>
+
+          <form
+            action="/api/vraagbaak/afmelden"
+            method="post"
+            className="flex shrink-0 items-center gap-3 text-xs"
+          >
+            <span className="text-white/50">
+              Ingelogd als{" "}
+              <span className="font-bold text-white/80">{gebruiker.naam}</span>
+            </span>
+            <button
+              type="submit"
+              className="rounded-full border border-white/25 px-3 py-1.5 font-bold text-white/80 transition-colors hover:border-rj-groen hover:text-rj-groen"
+            >
+              Afmelden
+            </button>
+          </form>
+        </div>
       </div>
     </footer>
   );
